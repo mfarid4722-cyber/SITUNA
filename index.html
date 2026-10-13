@@ -198,7 +198,7 @@
         </svg>
     </div>
 
-   <!-- ================= 1. MINIMALIST LOADING PAGE (OFFLINE READY) ================= -->
+  <!-- ================= 1. MINIMALIST LOADING PAGE (OFFLINE READY) ================= -->
     <div id="splashScreen" class="absolute inset-0 z-50 flex flex-col items-center justify-between p-8 transition-opacity duration-700 cursor-pointer overflow-hidden" style="background: linear-gradient(180deg, #52c3b4 0%, #24758d 50%, #0c2a44 100%);" onclick="hideSplashScreen()">
         
         <!-- Background SVG Flowers / Bikini Bottom Clouds -->
@@ -219,21 +219,15 @@
             </span>
         </div>
 
-        <!-- Central Minimal Animated Logo -->
+        <!-- Central Logo Image -->
         <div class="flex flex-col items-center my-auto z-10">
-            <div class="relative mb-6">
+            <div class="relative">
                 <!-- Soft Glow Ring behind Logo -->
-                <div class="w-28 h-28 bg-white/20 rounded-full blur-xl absolute -inset-2"></div>
+                <div class="w-40 h-40 bg-white/10 rounded-full blur-xl absolute -inset-2"></div>
                 
-                <!-- Circular White Logo with Ocean Blue Tuna Icon -->
-                <div class="relative w-28 h-28 bg-white rounded-full flex items-center justify-center p-3 shadow-2xl smooth-logo-glow border-2 border-sky-200">
-                    <svg viewBox="0 0 100 100" class="w-20 h-20 text-[#0284c7]" fill="currentColor">
-                        <path d="M 82 48 C 76 43 62 38 48 40 C 35 42 22 50 18 56 C 22 58 28 58 32 55 C 38 58 45 61 52 59 C 58 57 66 51 72 49 C 78 47 82 48 82 48 Z M 35 41 C 42 36 50 35 55 36 C 48 40 42 43 35 41 Z M 48 60 C 44 65 38 67 34 68 C 38 64 42 62 48 60 Z"/>
-                    </svg>
-                </div>
+                <!-- Logo Image -->
+                <img src="logo.png" alt="SITUNA Logo" class="relative w-40 h-40 object-contain smooth-logo-glow drop-shadow-2xl">
             </div>
-
-            <h1 class="text-3xl font-black tracking-wider text-white drop-shadow-md">SITUNA</h1>
         </div>
 
         <!-- Footer Text -->
