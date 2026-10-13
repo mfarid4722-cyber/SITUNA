@@ -198,7 +198,7 @@
         </svg>
     </div>
 
-  <!-- ================= 1. MINIMALIST LOADING PAGE (OFFLINE READY) ================= -->
+  <!-- ================= 1. MINIMALIST LOADING PAGE ================= -->
     <div id="splashScreen" class="absolute inset-0 z-50 flex flex-col items-center justify-between p-8 transition-opacity duration-700 cursor-pointer overflow-hidden" style="background: linear-gradient(180deg, #52c3b4 0%, #24758d 50%, #0c2a44 100%);" onclick="hideSplashScreen()">
         
         <!-- Background SVG Flowers / Bikini Bottom Clouds -->
@@ -213,27 +213,23 @@
             </svg>
         </div>
 
-        <div class="pt-2 text-center z-10">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-bold bg-white/20 text-white border border-white/30 backdrop-blur-sm">
-                <i class="fa-solid fa-bolt text-amber-300 text-[10px]"></i> Mode Luring (Offline Ready)
-            </span>
-        </div>
+        <!-- Empty top spacer (Replacing mode status badge) -->
+        <div class="pt-2"></div>
 
-        <!-- Central Logo Image -->
+        <!-- Central Logo (No Background, Gentle Animation) -->
         <div class="flex flex-col items-center my-auto z-10">
-            <div class="relative">
-                <!-- Soft Glow Ring behind Logo -->
-                <div class="w-40 h-40 bg-white/10 rounded-full blur-xl absolute -inset-2"></div>
-                
-                <!-- Logo Image -->
-                <img src="logo.png" alt="SITUNA Logo" class="relative w-40 h-40 object-contain smooth-logo-glow drop-shadow-2xl">
+            <div class="flex flex-col items-center gentle-float">
+                <svg viewBox="0 0 100 70" class="w-24 h-18 text-white drop-shadow-md mb-2" fill="currentColor">
+                    <path d="M 85 35 C 78 28 62 24 48 26 C 35 28 22 35 18 40 C 22 42 28 42 32 40 C 38 43 45 45 52 44 C 58 42 66 38 72 36 C 78 34 85 35 85 35 Z M 35 30 C 42 26 50 25 55 26 C 48 30 42 32 35 30 Z M 48 45 C 44 49 38 51 34 52 C 38 48 42 46 48 45 Z"/>
+                </svg>
+                <h1 class="text-3xl font-black tracking-wider text-white drop-shadow-md">SITUNA</h1>
             </div>
         </div>
 
-        <!-- Footer Text -->
+        <!-- Updated Footer Text -->
         <div class="text-center pb-2 z-10 space-y-0.5">
-            <p class="text-[9px] font-extrabold tracking-wider text-white uppercase opacity-95">DIREKTORAT JENDERAL PERIKANAN TANGKAP</p>
-            <p class="text-[8px] font-bold tracking-wider text-sky-200 uppercase opacity-90">KEMENTRIAN KELAUTAN DAN PERIKANAN</p>
+            <p class="text-[8px] font-extrabold tracking-wider text-white uppercase opacity-95 leading-tight">DIREKTORAT JENDERAL PENGUATAN DAYA SAING PRODUK KELAUTAN DAN PERIKANAN</p>
+            <p class="text-[8px] font-bold tracking-wider text-sky-200 uppercase opacity-90">KEMENTERIAN KELAUTAN DAN PERIKANAN</p>
             <p class="text-[7px] tracking-widest text-sky-300 uppercase font-semibold">REPUBLIK INDONESIA</p>
         </div>
     </div>
