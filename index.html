@@ -198,12 +198,24 @@
         </svg>
     </div>
 
-    <!-- ================= 1. MINIMALIST LOADING PAGE (OFFLINE READY) ================= -->
-    <div id="splashScreen" class="absolute inset-0 z-50 bg-gradient-to-b from-white via-sky-50 to-sky-100 flex flex-col items-center justify-between p-8 transition-opacity duration-700 cursor-pointer" onclick="hideSplashScreen()">
+   <!-- ================= 1. MINIMALIST LOADING PAGE (OFFLINE READY) ================= -->
+    <div id="splashScreen" class="absolute inset-0 z-50 bg-gradient-to-b from-[#52c3b4] via-[#24758d] to-[#0c2a44] flex flex-col items-center justify-between p-8 transition-opacity duration-700 cursor-pointer overflow-hidden" onclick="hideSplashScreen()">
         
+        <!-- Background SVG Flowers / Bikini Bottom Clouds -->
+        <div class="absolute top-4 right-[-20px] w-52 h-52 opacity-20 pointer-events-none">
+            <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="3">
+                <path d="M100,50 C120,20 150,30 150,60 C180,60 190,90 170,110 C190,130 170,160 140,150 C130,180 100,170 90,150 C60,170 40,150 50,120 C20,120 10,90 30,70 C10,50 30,20 60,35 C70,10 100,20 100,50 Z"/>
+            </svg>
+        </div>
+        <div class="absolute bottom-10 left-[-40px] w-60 h-60 opacity-15 pointer-events-none">
+            <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="3">
+                <path d="M100,50 C120,20 150,30 150,60 C180,60 190,90 170,110 C190,130 170,160 140,150 C130,180 100,170 90,150 C60,170 40,150 50,120 C20,120 10,90 30,70 C10,50 30,20 60,35 C70,10 100,20 100,50 Z"/>
+            </svg>
+        </div>
+
         <div class="pt-2 text-center z-10">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-bold bg-sky-100 text-sky-800 border border-sky-200">
-                <i class="fa-solid fa-bolt text-amber-500 text-[10px]"></i> Mode Luring (Offline Ready)
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-bold bg-white/20 text-white border border-white/30 backdrop-blur-sm">
+                <i class="fa-solid fa-bolt text-amber-300 text-[10px]"></i> Mode Luring (Offline Ready)
             </span>
         </div>
 
@@ -211,7 +223,7 @@
         <div class="flex flex-col items-center my-auto z-10">
             <div class="relative mb-6">
                 <!-- Soft Glow Ring behind Logo -->
-                <div class="w-28 h-28 bg-sky-300/40 rounded-full blur-xl absolute -inset-2"></div>
+                <div class="w-28 h-28 bg-white/20 rounded-full blur-xl absolute -inset-2"></div>
                 
                 <!-- Circular White Logo with Ocean Blue Tuna Icon -->
                 <div class="relative w-28 h-28 bg-white rounded-full flex items-center justify-center p-3 shadow-2xl smooth-logo-glow border-2 border-sky-200">
@@ -221,13 +233,14 @@
                 </div>
             </div>
 
-            <h1 class="text-3xl font-black tracking-wider text-sky-950 drop-shadow-sm">SITUNA</h1>
+            <h1 class="text-3xl font-black tracking-wider text-white drop-shadow-md">SITUNA</h1>
         </div>
 
         <!-- Footer Text -->
-        <div class="text-center pb-2 z-10">
-            <p class="text-[10px] font-extrabold tracking-wider text-sky-900 uppercase opacity-90">KEMENTERIAN KELAUTAN DAN PERIKANAN</p>
-            <p class="text-[8px] tracking-widest text-sky-700 uppercase font-semibold">REPUBLIK INDONESIA</p>
+        <div class="text-center pb-2 z-10 space-y-0.5">
+            <p class="text-[9px] font-extrabold tracking-wider text-white uppercase opacity-95">DIREKTORAT JENDERAL PERIKANAN TANGKAP</p>
+            <p class="text-[8px] font-bold tracking-wider text-sky-200 uppercase opacity-90">KEMENTRIAN KELAUTAN DAN PERIKANAN</p>
+            <p class="text-[7px] tracking-widest text-sky-300 uppercase font-semibold">REPUBLIK INDONESIA</p>
         </div>
     </div>
 
