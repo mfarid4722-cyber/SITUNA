@@ -198,56 +198,77 @@
         </svg>
     </div>
 
- <!-- ================= 1. MINIMALIST LOADING PAGE ================= -->
-<div id="splashScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-between p-8 transition-opacity duration-700 cursor-pointer overflow-hidden" style="background: linear-gradient(180deg, #52c3b4 0%, #24758d 50%, #0c2a44 100%);" onclick="hideSplashScreen()">
-    
-    <!-- Background SVG Flowers / Bikini Bottom Clouds -->
-    <div class="absolute top-4 right-[-20px] w-52 h-52 opacity-20 pointer-events-none">
-        <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="3">
-            <path d="M100,50 C120,20 150,30 150,60 C180,60 190,90 170,110 C190,130 170,160 140,150 C130,180 100,170 90,150 C60,170 40,150 50,120 C20,120 10,90 30,70 C10,50 30,20 60,35 C70,10 100,20 100,50 Z"/>
-        </svg>
-    </div>
-    <div class="absolute bottom-10 left-[-40px] w-60 h-60 opacity-15 pointer-events-none">
-        <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="3">
-            <path d="M100,50 C120,20 150,30 150,60 C180,60 190,90 170,110 C190,130 170,160 140,150 C130,180 100,170 90,150 C60,170 40,150 50,120 C20,120 10,90 30,70 C10,50 30,20 60,35 C70,10 100,20 100,50 Z"/>
-        </svg>
-    </div>
+<!-- Mobile App Container Wrapper -->
+<div id="appContainer" class="w-full max-w-md h-screen max-h-[900px] bg-white relative flex flex-col overflow-hidden shadow-2xl sm:rounded-3xl">
 
-    <!-- Empty top spacer -->
-    <div class="pt-2"></div>
+    <!-- ================= 1. SPLASH SCREEN / LOADING PAGE ================= -->
+    <div id="splashScreen" class="absolute inset-0 z-50 flex flex-col items-center justify-between p-8 transition-opacity duration-700 cursor-pointer overflow-hidden" style="background: linear-gradient(180deg, #52c3b4 0%, #24758d 50%, #0c2a44 100%);" onclick="hideSplashScreen()">
+        
+        <!-- Background SVG Flowers / Bikini Bottom Clouds -->
+        <div class="absolute top-4 right-[-20px] w-52 h-52 opacity-20 pointer-events-none">
+            <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="3">
+                <path d="M100,50 C120,20 150,30 150,60 C180,60 190,90 170,110 C190,130 170,160 140,150 C130,180 100,170 90,150 C60,170 40,150 50,120 C20,120 10,90 30,70 C10,50 30,20 60,35 C70,10 100,20 100,50 Z"/>
+            </svg>
+        </div>
+        <div class="absolute bottom-10 left-[-40px] w-60 h-60 opacity-15 pointer-events-none">
+            <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="3">
+                <path d="M100,50 C120,20 150,30 150,60 C180,60 190,90 170,110 C190,130 170,160 140,150 C130,180 100,170 90,150 C60,170 40,150 50,120 C20,120 10,90 30,70 C10,50 30,20 60,35 C70,10 100,20 100,50 Z"/>
+            </svg>
+        </div>
 
-    <!-- Central Logo (Exact Recreation matching your image layout without background box) -->
-    <div class="flex flex-col items-center my-auto z-10">
-        <div class="flex flex-col items-center gentle-float">
-            <!-- White Circle with Tuna Silhouette -->
-            <div class="relative w-32 h-32 bg-white rounded-full flex items-center justify-center p-4 shadow-2xl mb-3 border-2 border-sky-100/30">
-                <svg viewBox="0 0 100 100" class="w-24 h-24 text-slate-900" fill="currentColor">
-                    <path d="M 82 48 C 76 43 62 38 48 40 C 35 42 22 50 18 56 C 22 58 28 58 32 55 C 38 58 45 61 52 59 C 58 57 66 51 72 49 C 78 47 82 48 82 48 Z M 35 41 C 42 36 50 35 55 36 C 48 40 42 43 35 41 Z M 48 60 C 44 65 38 67 34 68 C 38 64 42 62 48 60 Z"/>
-                </svg>
+        <!-- Empty top spacer -->
+        <div class="pt-2"></div>
+
+        <!-- Central Logo using logo.png -->
+        <div class="flex flex-col items-center my-auto z-10">
+            <div class="flex flex-col items-center gentle-float">
+                <img src="logo.png" alt="Logo SITUNA" class="w-36 h-36 object-contain drop-shadow-2xl mb-1">
             </div>
-            <h1 class="text-3xl font-black tracking-wider text-white drop-shadow-md">SITUNA</h1>
+        </div>
+
+        <!-- Rapi & Rapat Footer Text -->
+        <div class="text-center pb-2 z-10 flex flex-col items-center gap-0.5">
+            <p class="text-[8px] font-extrabold tracking-tight text-white uppercase opacity-95 leading-tight max-w-[280px]">
+                DIREKTORAT JENDERAL PENGUATAN DAYA SAING PRODUK KELAUTAN DAN PERIKANAN
+            </p>
+            <p class="text-[8px] font-bold tracking-wider text-sky-200 uppercase opacity-90 leading-none mt-0.5">
+                KEMENTERIAN KELAUTAN DAN PERIKANAN
+            </p>
+            <p class="text-[7px] tracking-widest text-sky-300 uppercase font-semibold leading-none">
+                REPUBLIK INDONESIA
+            </p>
         </div>
     </div>
 
-    <!-- Rapi & Rapat Footer Text -->
-    <div class="text-center pb-2 z-10 flex flex-col items-center gap-0.5">
-        <p class="text-[8px] font-extrabold tracking-tight text-white uppercase opacity-95 leading-tight max-w-[280px]">
-            DIREKTORAT JENDERAL PENGUATAN DAYA SAING PRODUK KELAUTAN DAN PERIKANAN
-        </p>
-        <p class="text-[8px] font-bold tracking-wider text-sky-200 uppercase opacity-90 leading-none mt-0.5">
-            KEMENTERIAN KELAUTAN DAN PERIKANAN
-        </p>
-        <p class="text-[7px] tracking-widest text-sky-300 uppercase font-semibold leading-none">
-            REPUBLIK INDONESIA
-        </p>
-    </div>
-</div>
+    <!-- ================= 2. MAIN APP CONTENT ================= -->
+    <header class="bg-sky-700 text-white p-4 flex items-center justify-between shadow-md">
+        <div class="flex items-center space-x-2">
+            <img src="logo.png" alt="Logo" class="w-8 h-8 object-contain bg-white rounded-full p-0.5">
+            <h1 class="font-bold text-lg tracking-wider">SITUNA</h1>
+        </div>
+        <button class="text-white text-sm focus:outline-none">
+            <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+    </header>
 
-<!-- Main Content App -->
-<main class="flex-1 flex flex-col items-center justify-center p-6 text-center">
-    <h2 class="text-2xl font-bold mb-2">Selamat Datang di SITUNA</h2>
-    <p class="text-slate-400 text-sm">Aplikasi Anda siap digunakan.</p>
-</main>
+    <main class="flex-1 overflow-y-auto p-4 bg-slate-50 flex flex-col items-center justify-center text-center">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 max-w-xs w-full">
+            <div class="w-16 h-16 bg-sky-100 text-sky-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fa-solid fa-fish"></i>
+            </div>
+            <h2 class="text-lg font-bold text-slate-800 mb-1">Selamat Datang</h2>
+            <p class="text-slate-500 text-xs leading-relaxed mb-4">Sistem Informasi Penguatan Daya Saing Produk Kelautan dan Perikanan.</p>
+            <button onclick="showSplashAgain()" class="w-full py-2 px-4 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-semibold shadow transition">
+                Tampilkan Splash Screen
+            </button>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-3 text-center text-[10px] text-slate-400">
+        &copy; 2026 SITUNA - DJPDSPKP
+    </footer>
+
+</div>
 
 <script>
     function hideSplashScreen() {
@@ -258,8 +279,16 @@
         }, 700);
     }
 
-    // Auto hide after 2 seconds or click anywhere
-    setTimeout(hideSplashScreen, 2000);
+    function showSplashAgain() {
+        const splash = document.getElementById('splashScreen');
+        splash.style.display = 'flex';
+        setTimeout(() => {
+            splash.style.opacity = '1';
+        }, 10);
+    }
+
+    // Auto hide splash screen after 2.5 seconds
+    setTimeout(hideSplashScreen, 2500);
 </script>
 
 
