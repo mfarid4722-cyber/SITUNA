@@ -132,7 +132,8 @@
             return (
                 <div className="flex flex-col items-center justify-center min-h-screen text-white fade-in relative z-10">
                     <div className="mb-6 transform transition hover:scale-105">
-                        <img src="logo.png" alt="SITUNA Logo" className="w-56 h-56 object-contain drop-shadow-2xl" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
+                        {/* Ukuran logo diatur persis 150px x 150px */}
+                        <img src="logo.png" alt="Logo" className="w-[150px] h-[150px] object-contain drop-shadow-2xl" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
                     </div>
                     
                     <div className="absolute bottom-10 flex flex-col items-center">
@@ -160,7 +161,8 @@
                 <div className="flex items-center justify-center min-h-screen z-10 relative px-4">
                     <div className="glass-card p-10 rounded-3xl w-full max-w-md fade-in relative overflow-hidden">
                         <div className="text-center mb-6">
-                            <div className="w-24 h-24 flex items-center justify-center mx-auto mb-4 bg-situna-dark rounded-2xl shadow-inner p-3 border-2 border-white/20">
+                            {/* Ukuran box logo diatur 150px x 150px dengan background biru */}
+                            <div className="w-[150px] h-[150px] flex items-center justify-center mx-auto mb-6 bg-situna-dark rounded-2xl shadow-inner p-4 border-2 border-white/20">
                                 <img src="logo.png" alt="SITUNA Logo" className="w-full h-full object-contain drop-shadow-md" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
                             </div>
                             <h2 className="text-3xl font-display font-bold text-situna-dark">SITUNA Login</h2>
@@ -202,8 +204,9 @@
                 <div className="min-h-screen p-4 md:p-8 max-w-6xl mx-auto fade-in pb-20">
                     <header className="glass-card p-6 rounded-3xl mb-8 flex justify-between items-center shadow-md">
                         <div className="flex items-center gap-4">
-                            <div className="bg-situna-dark p-2.5 rounded-2xl shadow-inner border border-white/30 flex items-center justify-center">
-                                <img src="logo.png" alt="BKN Logo" className="w-12 h-12 object-contain drop-shadow-sm" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
+                            {/* Logo Dashboard dengan background biru */}
+                            <div className="bg-situna-dark p-3 rounded-2xl shadow-inner border border-white/30 flex items-center justify-center">
+                                <img src="logo.png" alt="BKN Logo" className="w-[60px] h-[60px] object-contain drop-shadow-sm" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
                             </div>
                             <div>
                                 <h1 className="text-xl md:text-2xl font-display font-bold text-situna-dark leading-tight">BADAN KARANTINA NASIONAL</h1>
@@ -560,7 +563,8 @@
                     </div>
 
                     {lot.stage === 4 && (
-                        <div id="pdf-certificate-container">
+                        <div id="pdf-certificate-container" style={{display: 'none'}}>
+                            {}
                             <div id="pdf-certificate-content" style={{ padding: '40px', fontFamily: 'sans-serif', border: '10px solid #0077b6' }}>
                                 <div style={{ textAlign: 'center', borderBottom: '2px solid #ccc', paddingBottom: '20px', marginBottom: '20px' }}>
                                     <h1 style={{ color: '#0077b6', margin: 0 }}>BADAN KARANTINA NASIONAL</h1>
