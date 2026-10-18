@@ -93,16 +93,16 @@
 
         const useSharedDatabase = () => {
             const [lots, setLots] = useState(() => {
-                const saved = localStorage.getItem('situna_db_v_clean');
+                const saved = localStorage.getItem('situna_db_v_final_v2');
                 return saved ? JSON.parse(saved) : [];
             });
-            const channel = useMemo(() => new BroadcastChannel('situna_sync_v_clean'), []);
+            const channel = useMemo(() => new BroadcastChannel('situna_sync_final_v2'), []);
 
             useEffect(() => {
                 channel.onmessage = (event) => {
                     if (event.data.type === 'SYNC') {
                         setLots(event.data.payload);
-                        localStorage.setItem('situna_db_v_clean', JSON.stringify(event.data.payload));
+                        localStorage.setItem('situna_db_v_final_v2', JSON.stringify(event.data.payload));
                     }
                 };
                 return () => channel.close();
@@ -110,7 +110,7 @@
 
             const updateDB = (newLots) => {
                 setLots(newLots);
-                localStorage.setItem('situna_db_v_clean', JSON.stringify(newLots));
+                localStorage.setItem('situna_db_v_final_v2', JSON.stringify(newLots));
                 channel.postMessage({ type: 'SYNC', payload: newLots });
             };
             return [lots, updateDB];
@@ -120,7 +120,7 @@
             <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${color}`}>{label}</span>
         );
 
-        /* STREAMING_CHUNK:Splash Screen (Clean Logo without container)... */
+        /* STREAMING_CHUNK:Splash Screen... */
         const SplashScreen = ({ onFinish }) => {
             useEffect(() => {
                 const timer = setTimeout(onFinish, 2500);
@@ -130,7 +130,7 @@
             return (
                 <div className="flex flex-col items-center justify-center min-h-screen text-white fade-in relative z-10">
                     <div className="mb-6 transform transition hover:scale-105">
-                        <img src="./logo.png" alt="SITUNA Logo" className="w-36 h-36 object-contain drop-shadow-2xl" onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/150x150/0077b6/ffffff?text=Logo'; }} />
+                        <img src="logo.png" alt="SITUNA Logo" className="w-36 h-36 object-contain drop-shadow-2xl" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
                     </div>
                     <h1 className="text-5xl font-display font-bold tracking-tight mb-2 drop-shadow-md">SITUNA</h1>
                     <p className="text-lg font-medium max-w-xs text-center leading-tight mb-12 drop-shadow">
@@ -144,7 +144,7 @@
             );
         };
 
-        /* STREAMING_CHUNK:Login Screen (Clean Logo without background card)... */
+        /* STREAMING_CHUNK:Login Screen... */
         const LoginScreen = ({ onLogin }) => {
             const [username, setUsername] = useState('');
             const [password, setPassword] = useState('');
@@ -161,7 +161,7 @@
                     <div className="glass-card p-10 rounded-3xl w-full max-w-md fade-in relative overflow-hidden">
                         <div className="text-center mb-6">
                             <div className="w-24 h-24 flex items-center justify-center mx-auto mb-2">
-                                <img src="./logo.png" alt="SITUNA Logo" className="w-full h-full object-contain drop-shadow-md" onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/100x100/0077b6/ffffff?text=SITUNA'; }} />
+                                <img src="logo.png" alt="SITUNA Logo" className="w-full h-full object-contain drop-shadow-md" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
                             </div>
                             <h2 className="text-3xl font-display font-bold text-situna-dark">SITUNA Login</h2>
                             <p className="text-xs text-gray-500 mt-1">Arsitektur Audit R1-R7 Aktif</p>
@@ -177,7 +177,7 @@
             );
         };
 
-        /* STREAMING_CHUNK:Dashboard Component (Logo on Left & Right Header)... */
+        /* STREAMING_CHUNK:Dashboard Component... */
         const Dashboard = ({ user, lots, updateLots, onLogout, showToast, onViewDetail }) => {
             const [showCreateModal, setShowCreateModal] = useState(false);
             const [form, setForm] = useState({ species: 'Thunnus albacares', weight: '', wpp: '', temp: '', docName: '' });
@@ -203,16 +203,14 @@
             return (
                 <div className="min-h-screen p-4 md:p-8 max-w-6xl mx-auto fade-in pb-20">
                     <header className="glass-card p-6 rounded-3xl mb-8 flex justify-between items-center shadow-md">
-                        {/* Logo di Pojok Kiri Dashboard */}
                         <div className="flex items-center gap-4">
-                            <img src="./logo.png" alt="SITUNA Logo" className="w-12 h-12 object-contain drop-shadow-sm" onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/50x50/0077b6/ffffff?text=Logo'; }} />
+                            <img src="logo.png" alt="SITUNA Logo" className="w-12 h-12 object-contain drop-shadow-sm" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
                             <div>
                                 <h1 className="text-2xl font-display font-bold text-situna-dark">SITUNA Terpadu</h1>
                                 <p className="text-xs text-gray-500 font-medium">Sistem Ketertelusuran Berbasis Audit (R1-R7)</p>
                             </div>
                         </div>
                         
-                        {/* Pojok Kanan Header Dashboard */}
                         <div className="flex items-center gap-3 bg-white/70 p-2 pl-4 rounded-2xl border border-white">
                             <div className="text-right hidden sm:block pr-2 border-r border-gray-200">
                                 <p className="text-sm font-bold text-gray-800">{user.name}</p>
@@ -273,7 +271,6 @@
                         </div>
                     )}
 
-                    {/* Modal Create */}
                     {showCreateModal && (
                         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in">
                             <div className="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl overflow-y-auto max-h-[90vh]">
@@ -375,7 +372,6 @@
                         <div><h2 className="text-xl font-bold text-gray-800">Paspor: <span className="font-mono text-situna-main">{lot.id}</span></h2></div>
                     </div>
 
-                    {/* Traceability Stepper */}
                     <div className="glass-card p-6 rounded-3xl mb-6 shadow-sm border-t-4 border-t-situna-main">
                         <h4 className="text-sm font-bold text-gray-700 mb-6 uppercase tracking-wider text-center">Rantai Pasok Aktual</h4>
                         <div className="flex justify-between relative max-w-4xl mx-auto mb-2 px-8">
@@ -396,7 +392,6 @@
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        {/* Info Kiri */}
                         <div className="lg:col-span-1 space-y-6">
                             <div className="glass-card p-6 rounded-3xl shadow-sm text-center">
                                 <canvas ref={qrRef} className="rounded-xl mx-auto border p-2 bg-white shadow-sm mb-4"></canvas>
@@ -411,7 +406,6 @@
                             </div>
                         </div>
 
-                        {/* Tabs Kanan */}
                         <div className="lg:col-span-2">
                             <div className="glass-card rounded-3xl overflow-hidden shadow-xl border border-white">
                                 <div className="flex border-b border-gray-200 overflow-x-auto bg-gray-50/50">
@@ -421,7 +415,6 @@
                                 </div>
                                 
                                 <div className="p-6 md:p-8 min-h-[350px]">
-                                    {/* TAB 1: R6 (LAB / KARANTINA) */}
                                     {tab === TABS[0] && (
                                         <div className="space-y-6 fade-in">
                                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -452,7 +445,6 @@
                                         </div>
                                     )}
 
-                                    {/* TAB 2: R4 (SERAH TERIMA) */}
                                     {tab === TABS[1] && (
                                         <div className="space-y-6 fade-in">
                                             <div className="flex items-center justify-between border rounded-xl p-4 bg-white relative">
@@ -480,7 +472,6 @@
                                         </div>
                                     )}
 
-                                    {/* TAB 3: R2 (NERACA MASSA) */}
                                     {tab === TABS[2] && (
                                         <div className="space-y-6 fade-in">
                                             {lot.processInfo ? (
@@ -502,7 +493,6 @@
                                         </div>
                                     )}
 
-                                    {/* TAB 4: R1/R3 (SILSILAH) */}
                                     {tab === TABS[3] && (
                                         <div className="space-y-6 fade-in">
                                             <div className="border rounded-xl p-4 bg-white">
@@ -519,7 +509,6 @@
                                         </div>
                                     )}
 
-                                    {/* TAB 5: R5 (SUHU) */}
                                     {tab === TABS[4] && (
                                         <div className="space-y-6 fade-in">
                                             <div className="border rounded-xl p-6 bg-white text-center">
@@ -533,7 +522,6 @@
                                         </div>
                                     )}
 
-                                    {/* TAB 6: R7 (AUDIT KOREKSI) */}
                                     {tab === TABS[5] && (
                                         <div className="space-y-6 fade-in">
                                             {user.role === 'admin' && (
@@ -564,7 +552,6 @@
                         </div>
                     </div>
 
-                    {/* HIDDEN PDF TEMPLATE */}
                     {lot.stage === 4 && (
                         <div id="pdf-certificate-container">
                             <div id="pdf-certificate-content" style={{ padding: '40px', fontFamily: 'sans-serif', border: '10px solid #0077b6' }}>
