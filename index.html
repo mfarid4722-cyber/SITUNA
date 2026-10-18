@@ -3,1120 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SITUNA - Paspor Lot Tuna</title>
+    <title>SITUNA - Sistem Ketertelusuran Ikan Tuna Nasional</title>
     
-    <!-- React & ReactDOM (Development Version untuk kemudahan deteksi eror) -->
+    <!-- React & ReactDOM -->
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     
-    <!-- Babel untuk kompilasi JSX di browser -->
+    <!-- Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- FontAwesome untuk Ikon -->
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Fonts: Poppins (Judul) & Inter (Teks Paragraf) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- QRious untuk Generate QR Code Fisik -->
+    <!-- QR Code Generator & PDF Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-    <!-- HTML5 QRCode Scanner -->
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 
+    <!-- Tailwind Config -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { 
-                        sans: ['Inter', 'sans-serif'],
-                        poppins: ['Poppins', 'sans-serif']
-                    },
-                    colors: {
-                        situna: {
-                            dark: '#0077b6',
-                            main: '#00b4d8',
-                            light: '#90e0ef',
-                            bg: '#caf0f8',
-                            purple: '#c1bceb'
-                        }
-                    }
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Poppins', 'sans-serif'] },
+                    colors: { situna: { dark: '#0077b6', main: '#00b4d8', light: '#90e0ef', bg: '#caf0f8' } }
                 }
             }
         }
     </script>
     <style>
-        body { margin: 0; overflow-x: hidden; font-family: 'Inter', sans-serif; background-color: #caf0f8; color: #1e293b; }
-        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
+        body { margin: 0; background-color: #caf0f8; font-family: 'Inter', sans-serif; color: #1e293b; overflow-x: hidden; }
+        h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; }
         
-        /* Organic Background Shapes - Glassmorphism Vibe */
-        .bg-blobs {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1;
-            overflow: hidden;
-            background: linear-gradient(135deg, #0077b6 0%, #00b4d8 50%, #caf0f8 100%);
-        }
-        .blob {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-            animation: morph 15s ease-in-out infinite alternate;
-        }
+        /* Glassmorphism Background */
+        .bg-blobs { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; background: linear-gradient(135deg, #0077b6 0%, #00b4d8 50%, #caf0f8 100%); overflow: hidden; }
+        .blob { position: absolute; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; animation: morph 15s ease-in-out infinite alternate; }
         .blob-1 { width: 600px; height: 600px; top: -100px; left: -200px; background: rgba(144, 224, 239, 0.4); }
-        .blob-2 { width: 500px; height: 500px; bottom: -100px; right: -100px; background: rgba(193, 188, 235, 0.3); animation-delay: 2s; }
-        .blob-3 { width: 400px; height: 600px; top: 30%; left: 40%; background: rgba(0, 119, 182, 0.2); animation-delay: 4s; }
-
-        @keyframes morph {
-            0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; transform: rotate(0deg) scale(1); }
-            100% { border-radius: 60% 40% 30% 70% / 60% 40% 50% 50%; transform: rotate(10deg) scale(1.1); }
-        }
+        .blob-2 { width: 500px; height: 500px; bottom: -100px; right: -100px; background: rgba(255, 255, 255, 0.2); animation-delay: 2s; }
+        @keyframes morph { 0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; transform: rotate(0deg) scale(1); } 100% { border-radius: 60% 40% 30% 70% / 60% 40% 50% 50%; transform: rotate(10deg) scale(1.1); } }
 
         /* Animations */
-        .fade-in { animation: fadeIn 0.6s ease-out forwards; }
-        .slide-up { animation: slideUp 0.5s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 30px rgba(0, 119, 182, 0.15); }
         
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 32px 0 rgba(0, 119, 182, 0.1);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(0, 180, 216, 0.5); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(0, 119, 182, 0.8); }
-
-        #qr-reader {
-            width: 100%; max-width: 400px; margin: 0 auto; border-radius: 1rem; overflow: hidden; border: 2px solid #00b4d8;
-        }
+        /* Stepper CSS */
+        .step-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; z-index: 10; position: relative;}
+        
+        /* PDF Container Hidden Offscreen */
+        #pdf-certificate-container { position: absolute; left: -9999px; top: 0; width: 800px; background: white; color: black; }
+        
+        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(0, 180, 216, 0.5); border-radius: 10px; }
     </style>
 </head>
-<body>
-    <!-- Indikator Loading awal jika internet lambat -->
-    <div id="root">
-        <div style="display:flex; justify-content:center; align-items:center; height:100vh; flex-direction:column; font-family:sans-serif; color:#0077b6;">
-            <i class="fas fa-circle-notch fa-spin fa-3x" style="margin-bottom: 20px;"></i>
-            <h2>Memuat Sistem SITUNA...</h2>
-            <p>Pastikan koneksi internet Anda aktif untuk mengunduh modul sistem.</p>
-        </div>
-    </div>
-
-    <script type="text/babel">
-        class ErrorBoundary extends React.Component {
-            constructor(props) {
-                super(props);
-                this.state = { hasError: false, error: null, errorInfo: null };
-            }
-            static getDerivedStateFromError(error) {
-                return { hasError: true };
-            }
-            componentDidCatch(error, errorInfo) {
-                this.setState({ error: error, errorInfo: errorInfo });
-                console.error("Terjadi kesalahan di React:", error, errorInfo);
-            }
-            render() {
-                if (this.state.hasError) {
-                    return (
-                        <div className="min-h-screen bg-rose-50 flex items-center justify-center p-8">
-                            <div className="bg-white p-8 rounded-2xl shadow-xl max-w-2xl w-full border border-rose-200">
-                                <h2 className="text-2xl font-bold text-rose-600 mb-4"><i className="fas fa-bug mr-2"></i>Sistem Berhenti Beroperasi (Crash)</h2>
-                                <p className="text-gray-700 mb-4">Mohon maaf, terjadi kesalahan logika pada prototipe. Detail eror di bawah ini dapat membantu perbaikan:</p>
-                                <pre className="bg-gray-900 text-green-400 p-4 rounded-xl overflow-x-auto text-xs font-mono mb-4">
-                                    {this.state.error && this.state.error.toString()}
-                                    <br/>
-                                    {this.state.errorInfo && this.state.errorInfo.componentStack}
-                                </pre>
-                                <button onClick={() => window.location.reload()} className="bg-rose-600 text-white px-6 py-2 rounded-lg font-bold">Muat Ulang Halaman</button>
-                            </div>
-                        </div>
-                    );
-                }
-                return this.props.children; 
-            }
-        }
-
-        const generateId = () => `SITUNA-${Math.floor(100000 + Math.random() * 900000)}`;
-
-        const initialUsers = [
-            { id: 'u1', username: 'admin', role: 'admin', name: 'Admin Pusat Barantin' },
-            { id: 'u2', username: 'barantin', role: 'barantin', name: 'Petugas Karantina' },
-            { id: 'u3', username: 'nelayan', role: 'nelayan', name: 'Kapten Kapal Nelayan' },
-            { id: 'u4', username: 'pengolah', role: 'pengolahan', name: 'Operator UPI / Pabrik' }
-        ];
-
-        // Simulasi Database Lot 
-        let simulatedLots = [
-            {
-                id: 'SITUNA-748923',
-                passportNo: 'PS-2026-001',
-                source: 'Kapal Nelayan A',
-                species: 'Thunnus albacares (Madidihang)',
-                initialWeight: 800,
-                type: 'source',
-                parents: [],
-                date: '2026-10-17 08:00',
-                currentStage: 2, // Pendaratan
-                axisA_evidence: 'memadai',
-                axisB_handling: 'tidak_terindikasi',
-                axisC_quarantine: 'belum_diperiksa',
-                temperatureGap: false,
-                massBalance: { in: 800, out: 800, diff: 0, pct: 0, status: 'memadai', tolerance: 1.0 },
-                handover: { sender: 'Kapal Nelayan A', receiver: 'Pengepul 1', status: 'pending' },
-                history: [{ time: '2026-10-17 08:00', text: 'Pencatatan awal (Kapal Nelayan A). Logbook tersinkronisasi.', actor: 'Nahkoda' }]
-            },
-            {
-                id: 'SITUNA-892110',
-                passportNo: 'PS-2026-002',
-                source: 'Pemecahan dari SITUNA-748923',
-                species: 'Thunnus albacares (Fillet)',
-                initialWeight: 500, 
-                receivedWeight: 488, 
-                type: 'split',
-                parents: ['SITUNA-748923'],
-                date: '2026-10-17 14:00',
-                currentStage: 3, // Pengolahan
-                axisA_evidence: 'bertentangan', 
-                axisB_handling: 'tidak_terindikasi',
-                axisC_quarantine: 'belum_diperiksa',
-                temperatureGap: false,
-                massBalance: { in: 500, out: 488, diff: 12, pct: 2.4, status: 'bertentangan', tolerance: 1.0 },
-                handover: { sender: 'Pengepul 1', receiver: 'UPI / Pabrik X', status: 'conflict' },
-                history: [
-                    { time: '2026-10-17 14:00', text: 'Pemecahan lot induk terkonfirmasi', actor: 'Pengepul' },
-                    { time: '2026-10-17 15:30', text: 'Sistem menolak validasi ganda. Selisih bobot terdeteksi.', actor: 'Sistem Pusat' }
-                ]
-            },
-            {
-                id: 'SITUNA-230944',
-                passportNo: 'PS-2026-003',
-                source: 'Kapal Nelayan B',
-                species: 'Thunnus obesus (Mata Besar)',
-                initialWeight: 1200,
-                type: 'source',
-                parents: [],
-                date: '2026-10-18 09:00',
-                currentStage: 4, // Logistik/Distribusi (Menuju Karantina)
-                axisA_evidence: 'belum_cukup', 
-                axisB_handling: 'perlu_ditinjau',
-                axisC_quarantine: 'dalam_pemeriksaan',
-                temperatureGap: true, 
-                massBalance: { in: 1200, out: 1200, diff: 0, pct: 0, status: 'memadai', tolerance: 1.0 },
-                handover: { sender: 'UPI / Pabrik Y', receiver: 'Distributor Z', status: 'confirmed' },
-                history: [
-                    { time: '2026-10-18 09:00', text: 'Pencatatan awal (Kapal B)', actor: 'Sistem Luring' },
-                    { time: '2026-10-19 11:00', text: 'Kesenjangan log suhu logistik (4 jam kosong). Status diubah menjadi Perlu Ditinjau.', actor: 'Sistem Pusat' },
-                    { time: '2026-10-19 16:00', text: 'Berkas masuk ke antrean Karantina', actor: 'Petugas' }
-                ]
-            }
-        ];
-
-        const ConfirmModal = ({ isOpen, title, message, onConfirm, onCancel }) => {
-            if (!isOpen) return null;
-            return (
-                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center fade-in px-4">
-                    <div className="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl transform scale-100 transition-transform">
-                        <div className="bg-rose-100 text-rose-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i className="fas fa-exclamation-triangle text-2xl"></i>
-                        </div>
-                        <h3 className="text-xl font-bold text-slate-800 text-center mb-2">{title}</h3>
-                        <p className="text-sm text-slate-600 text-center mb-8">{message}</p>
-                        <div className="flex gap-3 justify-center">
-                            <button onClick={onCancel} className="px-5 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition">Batal</button>
-                            <button onClick={onConfirm} className="px-5 py-2.5 text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl transition shadow-md">Ya, Lanjutkan</button>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-
-        const Toast = ({ message, type, onClose }) => {
-            React.useEffect(() => {
-                const timer = setTimeout(onClose, 3000);
-                return () => clearTimeout(timer);
-            }, [onClose]);
-
-            const bgColors = {
-                success: 'bg-emerald-500',
-                error: 'bg-rose-500',
-                info: 'bg-situna-dark',
-                warning: 'bg-amber-500'
-            };
-
-            return (
-                <div className={`fixed top-8 left-1/2 transform -translate-x-1/2 z-[100] ${bgColors[type]} text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 slide-up border border-white/20`}>
-                    <i className={`fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-times-circle' : type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'} text-lg`}></i>
-                    <span className="text-sm font-bold tracking-wide">{message}</span>
-                </div>
-            );
-        };
-
-        const StatusBadge = ({ type, status }) => {
-            const configs = {
-                evidence: {
-                    'memadai': { color: 'bg-emerald-100 text-emerald-800 border-emerald-300', icon: 'fa-check-circle', label: 'Memadai' },
-                    'belum_cukup': { color: 'bg-amber-100 text-amber-800 border-amber-300', icon: 'fa-exclamation-triangle', label: 'Belum Cukup' },
-                    'bertentangan': { color: 'bg-rose-100 text-rose-800 border-rose-300', icon: 'fa-times-circle', label: 'Bertentangan' }
-                },
-                handling: {
-                    'tidak_terindikasi': { color: 'bg-emerald-100 text-emerald-800', icon: 'fa-thermometer-empty', label: 'Aman' },
-                    'perlu_ditinjau': { color: 'bg-amber-100 text-amber-800', icon: 'fa-thermometer-half', label: 'Tinjau' },
-                    'terindikasi': { color: 'bg-rose-100 text-rose-800', icon: 'fa-thermometer-full', label: 'Penyimpangan' }
-                },
-                quarantine: {
-                    'belum_diperiksa': { color: 'bg-slate-100 text-slate-600', icon: 'fa-clock', label: 'Belum Diperiksa' },
-                    'dalam_pemeriksaan': { color: 'bg-blue-100 text-blue-800', icon: 'fa-microscope', label: 'Pemeriksaan' },
-                    'lulus': { color: 'bg-emerald-100 text-emerald-800', icon: 'fa-stamp', label: 'Lulus Ekspor' },
-                    'ditolak': { color: 'bg-rose-100 text-rose-800', icon: 'fa-ban', label: 'Ditolak' }
-                }
-            };
-            const conf = configs[type][status] || configs[type]['belum_diperiksa'];
-            return (
-                <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border ${conf.color}`}>
-                    <i className={`fas ${conf.icon} mr-1.5`}></i> {conf.label}
-                </span>
-            );
-        };
-
-        const TraceabilityTimeline = ({ currentStage, quarantineStatus }) => {
-            const stages = [
-                { id: 1, label: 'Penangkapan (Hulu)', icon: 'fa-ship', desc: 'Isi Logbook & SHTI Awal' },
-                { id: 2, label: 'Pendaratan / TPI', icon: 'fa-anchor', desc: 'Bongkar, Timbang Aktual' },
-                { id: 3, label: 'Pengolahan UPI', icon: 'fa-industry', desc: 'Fillet, Kemas, Bekukan' },
-                { id: 4, label: 'Karantina Barantin', icon: 'fa-shield-virus', desc: 'Pemeriksaan Fisik & Lab' },
-                { id: 5, label: 'Pelepasan Ekspor', icon: 'fa-plane-departure', desc: 'HC Terbit, Rilis Pasar' }
-            ];
-
-            return (
-                <div className="w-full py-6">
-                    <div className="flex justify-between relative mb-12">
-                        {/* Background Line */}
-                        <div className="absolute left-10 right-10 top-6 h-1.5 bg-slate-200 rounded-full z-0"></div>
-                        
-                        {/* Progress Line */}
-                        <div 
-                            className="absolute left-10 top-6 h-1.5 bg-situna-main rounded-full z-0 transition-all duration-1000 ease-in-out" 
-                            style={{ width: `calc(${((currentStage - 1) / (stages.length - 1)) * 100}% - 40px)` }}
-                        ></div>
-
-                        {stages.map((stage) => {
-                            const isCompleted = stage.id < currentStage;
-                            const isCurrent = stage.id === currentStage;
-                            
-                            let statusColor = "bg-white text-slate-300 border-slate-300";
-                            let pulse = false;
-
-                            if (stage.id < currentStage) {
-                                statusColor = "bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/40"; 
-                            } else if (stage.id === currentStage) {
-                                if (stage.id === 5 && quarantineStatus === 'ditolak') {
-                                    statusColor = "bg-rose-500 text-white border-rose-500 shadow-lg shadow-rose-500/40"; 
-                                } else if (stage.id === 5 && quarantineStatus === 'lulus') {
-                                    statusColor = "bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/40"; 
-                                } else {
-                                    statusColor = "bg-situna-main text-white border-situna-main shadow-lg shadow-situna-main/50"; 
-                                    pulse = true;
-                                }
-                            }
-
-                            return (
-                                <div key={stage.id} className="relative z-10 flex flex-col items-center w-1/5 group">
-                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center border-[3px] transition-all duration-300 bg-white ${statusColor} ${pulse ? 'animate-pulse' : ''} z-10`}>
-                                        <i className={`fas ${stage.icon} text-lg ${isCompleted || isCurrent ? 'text-white' : 'text-slate-300'}`}></i>
-                                    </div>
-                                    <div className="absolute top-16 text-center w-full px-1">
-                                        <p className={`text-xs font-bold leading-tight ${isCurrent ? 'text-situna-dark' : isCompleted ? 'text-emerald-700' : 'text-slate-400'}`}>
-                                            {stage.label}
-                                        </p>
-                                        <p className="text-[9px] text-slate-400 mt-1 hidden md:block">{stage.desc}</p>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            );
-        };
-
-        const SplashScreen = ({ onFinish }) => {
-            React.useEffect(() => {
-                const timer = setTimeout(onFinish, 2500);
-                return () => clearTimeout(timer);
-            }, [onFinish]);
-
-            return (
-                <div className="flex flex-col items-center justify-center min-h-screen text-white fade-in relative z-10">
-                    <div className="bg-white/20 p-8 rounded-full backdrop-blur-md mb-6 shadow-2xl border border-white/40 transform transition hover:scale-105">
-                        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="white" strokeWidth="2" fill="white"/>
-                            <path d="M7 13.5C7 13.5 8.5 12 11 12C13.5 12 16.5 14 18 11.5C18 11.5 15.5 9 11 9.5C6.5 10 5 13.5 5 13.5L7 13.5Z" fill="#0077b6"/>
-                            <path d="M5 13.5C5 13.5 4 14.5 3 16C4.5 16.5 6 15.5 7 13.5H5Z" fill="#0077b6"/>
-                        </svg>
-                    </div>
-                    <h1 className="text-5xl font-poppins font-bold tracking-tight mb-2 drop-shadow-md">SITUNA</h1>
-                    <p className="text-lg font-medium max-w-xs text-center leading-tight mb-12 drop-shadow">
-                        SISTEM INFORMASI<br/>KETELUSURAN IKAN TUNA<br/>NASIONAL
-                    </p>
-                    <div className="absolute bottom-10 flex flex-col items-center">
-                        <div className="w-10 h-10 border-4 border-t-white border-white/20 rounded-full animate-spin mb-4"></div>
-                        <p className="text-sm font-semibold tracking-wider opacity-90 drop-shadow">
-                            BADAN KARANTINA INDONESIA
-                        </p>
-                    </div>
-                </div>
-            );
-        };
-
-        const LoginScreen = ({ onLogin }) => {
-            const [role, setRole] = React.useState('admin');
-            
-            const handleLogin = (e) => {
-                e.preventDefault();
-                const user = initialUsers.find(u => u.role === role);
-                onLogin(user);
-            };
-
-            return (
-                <div className="flex items-center justify-center min-h-screen z-10 relative fade-in px-4">
-                    <div className="glass-card p-10 rounded-3xl w-full max-w-md">
-                        <div className="text-center mb-8">
-                            <div className="bg-situna-dark rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-6 shadow-xl text-white text-2xl transform rotate-3">
-                                <i className="fas fa-fingerprint transform -rotate-3"></i>
-                            </div>
-                            <h2 className="text-3xl font-bold text-situna-dark mb-2">Akses Sistem</h2>
-                            <p className="text-slate-500 text-sm">Role-Based Access Control (RBAC)</p>
-                        </div>
-                        <form onSubmit={handleLogin} className="space-y-6">
-                            <div>
-                                <select 
-                                    className="w-full border-2 border-white/50 bg-white/70 backdrop-blur-sm rounded-xl shadow-inner py-3 px-4 focus:ring-2 focus:ring-situna-main focus:border-situna-main text-slate-800 font-bold outline-none transition"
-                                    value={role}
-                                    onChange={(e) => setRole(e.target.value)}
-                                >
-                                    <option value="admin">Administrator Pusat (Semua Akses)</option>
-                                    <option value="barantin">Petugas Karantina (Otoritas Sumbu C)</option>
-                                    <option value="nelayan">Nelayan / Kapal (Hulu)</option>
-                                    <option value="pengolahan">Unit Pengolahan / Pabrik</option>
-                                </select>
-                            </div>
-                            <button type="submit" className="w-full bg-gradient-to-r from-situna-dark to-situna-main text-white font-bold py-3.5 px-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 text-lg">
-                                Masuk ke Prototipe
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            );
-        };
-
-        const Dashboard = ({ user, lots, onViewLot, onLogout, onCreateLot, showToast }) => {
-            const [search, setSearch] = React.useState('');
-            const [showCreateModal, setShowCreateModal] = React.useState(false);
-            const [showQRScanner, setShowQRScanner] = React.useState(false);
-            const scannerRef = React.useRef(null);
-            
-            const [formData, setFormData] = React.useState({
-                species: 'Thunnus albacares (Madidihang)',
-                weight: '',
-                source: user.role === 'nelayan' ? 'Kapal Saya' : '',
-                currentStage: 1
-            });
-
-            const stats = {
-                total: lots.length,
-                issues: lots.filter(l => l.axisA_evidence === 'bertentangan' || l.axisB_handling === 'terindikasi').length,
-                pending: lots.filter(l => l.axisC_quarantine === 'belum_diperiksa').length
-            };
-
-            const filteredLots = lots.filter(l => 
-                l.id.toLowerCase().includes(search.toLowerCase()) || 
-                l.passportNo.toLowerCase().includes(search.toLowerCase())
-            );
-
-            // Setup QR Scanner when modal opens
-            React.useEffect(() => {
-                let html5QrcodeScanner = null;
-                if (showQRScanner) {
-                    html5QrcodeScanner = new Html5QrcodeScanner(
-                        "qr-reader", { fps: 10, qrbox: 250 });
-                    
-                    html5QrcodeScanner.render((decodedText) => {
-                        // On success
-                        html5QrcodeScanner.clear();
-                        setShowQRScanner(false);
-                        
-                        // Check if it's a valid URL or just ID
-                        const idMatch = decodedText.match(/SITUNA-\d+/);
-                        const targetId = idMatch ? idMatch[0] : decodedText;
-                        
-                        const foundLot = lots.find(l => l.id === targetId);
-                        if (foundLot) {
-                            showToast(`QR Berhasil Terbaca! Membuka ${foundLot.id}`, 'success');
-                            onViewLot(foundLot);
-                        } else {
-                            showToast(`Lot dengan ID ${targetId} tidak ditemukan.`, 'error');
-                        }
-                    }, (err) => {
-                        // ignore continuous errors
-                    });
-                }
-
-                return () => {
-                    if (html5QrcodeScanner) {
-                        html5QrcodeScanner.clear().catch(error => {
-                            console.error("Failed to clear html5QrcodeScanner. ", error);
-                        });
-                    }
-                };
-            }, [showQRScanner, lots]);
-
-            const handleCreateSubmit = (e) => {
-                e.preventDefault();
-                if (!formData.weight || !formData.source) return;
-                
-                onCreateLot({
-                    species: formData.species,
-                    initialWeight: parseFloat(formData.weight),
-                    source: formData.source,
-                    currentStage: parseInt(formData.currentStage)
-                });
-                setShowCreateModal(false);
-                setFormData({...formData, weight: '', source: user.role === 'nelayan' ? 'Kapal Saya' : ''});
-            };
-
-            return (
-                <div className="min-h-screen p-4 md:p-8 z-10 relative fade-in max-w-6xl mx-auto">
-                    {/* Header */}
-                    <header className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 glass-card p-4 rounded-3xl border border-white">
-                        <div className="flex items-center gap-4">
-                            <div className="bg-gradient-to-br from-situna-dark to-situna-main rounded-2xl p-3 shadow-lg">
-                                <i className="fas fa-fish text-white text-2xl"></i>
-                            </div>
-                            <div>
-                                <h1 className="text-2xl font-extrabold text-situna-dark tracking-tight leading-none">SITUNA</h1>
-                                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Paspor Lot Tuna</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-4 bg-white/60 p-2 pl-6 rounded-2xl border border-white">
-                            <div className="text-right hidden sm:block">
-                                <p className="text-sm font-bold text-slate-800">{user.name}</p>
-                                <p className="text-[10px] font-bold text-situna-main uppercase tracking-wider">{user.role}</p>
-                            </div>
-                            <div className="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center text-slate-600 font-bold border-2 border-white shadow-sm">
-                                {user.name.charAt(0)}
-                            </div>
-                            <button onClick={onLogout} className="bg-rose-50 hover:bg-rose-500 text-rose-500 hover:text-white h-10 w-10 rounded-xl transition duration-300 shadow-sm flex items-center justify-center ml-2" title="Keluar">
-                                <i className="fas fa-power-off"></i>
-                            </button>
-                        </div>
-                    </header>
-
-                    {/* Action Bar (Search & QR) */}
-                    <div className="glass-card rounded-2xl p-2 flex flex-col md:flex-row items-center mb-6 border border-white gap-2">
-                        <h2 className="text-lg font-bold text-slate-800 px-4 hidden md:block whitespace-nowrap"><i className="fas fa-passport text-situna-main mr-2"></i>DATABASE PASPOR</h2>
-                        <div className="flex-1 w-full flex items-center px-4 bg-white/80 rounded-xl border border-slate-100 shadow-inner">
-                            <i className="fas fa-search text-slate-400"></i>
-                            <input 
-                                type="text" 
-                                placeholder="Ketik ID SITUNA-XXXX atau No Paspor..." 
-                                className="w-full bg-transparent border-none py-3.5 px-3 text-sm text-slate-700 outline-none font-medium"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                            />
-                        </div>
-                        <button 
-                            onClick={() => setShowQRScanner(true)}
-                            className="w-full md:w-auto px-6 py-3.5 rounded-xl transition shadow-md whitespace-nowrap font-bold text-white flex items-center justify-center gap-2 bg-gradient-to-r from-situna-dark to-situna-main hover:shadow-lg"
-                        >
-                            <i className="fas fa-qrcode text-lg"></i>
-                            <span>Pindai QR Kamera</span>
-                        </button>
-                    </div>
-
-                    {/* Stats Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
-                        <div className="glass-card rounded-3xl p-6 flex flex-col justify-between slide-up border border-white relative overflow-hidden" style={{animationDelay: '0.1s'}}>
-                            <div className="absolute right-0 top-0 -mr-4 -mt-4 opacity-10"><i className="fas fa-boxes text-8xl"></i></div>
-                            <div className="flex justify-between items-start mb-4 relative z-10">
-                                <div className="bg-blue-100 text-blue-600 p-3 rounded-2xl"><i className="fas fa-boxes text-xl"></i></div>
-                                <span className="text-4xl font-black text-slate-800 tracking-tight">{stats.total}</span>
-                            </div>
-                            <div className="relative z-10">
-                                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Total Paspor Aktif</h3>
-                                <p className="text-[10px] text-slate-400 mt-1 font-medium">Melalui validasi sistem otomatis</p>
-                            </div>
-                        </div>
-                        <div className="glass-card rounded-3xl p-6 flex flex-col justify-between slide-up border border-white relative overflow-hidden" style={{animationDelay: '0.2s'}}>
-                            <div className="absolute right-0 top-0 -mr-4 -mt-4 opacity-10"><i className="fas fa-exclamation-triangle text-8xl"></i></div>
-                            <div className="flex justify-between items-start mb-4 relative z-10">
-                                <div className="bg-rose-100 text-rose-600 p-3 rounded-2xl"><i className="fas fa-exclamation-triangle text-xl"></i></div>
-                                <span className="text-4xl font-black text-slate-800 tracking-tight">{stats.issues}</span>
-                            </div>
-                            <div className="relative z-10">
-                                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Perlu Perhatian (R2/R5)</h3>
-                                <p className="text-[10px] text-slate-400 mt-1 font-medium">Selisih bobot / Kesenjangan Suhu</p>
-                            </div>
-                        </div>
-                        <div className="glass-card rounded-3xl p-6 flex flex-col justify-between slide-up border border-white relative overflow-hidden" style={{animationDelay: '0.3s'}}>
-                             <div className="absolute right-0 top-0 -mr-4 -mt-4 opacity-10"><i className="fas fa-microscope text-8xl"></i></div>
-                            <div className="flex justify-between items-start mb-4 relative z-10">
-                                <div className="bg-amber-100 text-amber-600 p-3 rounded-2xl"><i className="fas fa-microscope text-xl"></i></div>
-                                <span className="text-4xl font-black text-slate-800 tracking-tight">{stats.pending}</span>
-                            </div>
-                            <div className="relative z-10">
-                                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Antrean Karantina (R6)</h3>
-                                <p className="text-[10px] text-slate-400 mt-1 font-medium">Menunggu validasi manual Barantin</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Main Table */}
-                    <div className="glass-card rounded-3xl p-6 md:p-8 slide-up mb-8 border border-white shadow-xl" style={{animationDelay: '0.4s'}}>
-                        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-                            <div>
-                                <h3 className="text-xl font-bold text-slate-800">Database Paspor Lot</h3>
-                                <p className="text-xs text-slate-500">Rekaman Audit Imutabel Tersinkronisasi</p>
-                            </div>
-                            {(user.role === 'admin' || user.role === 'nelayan' || user.role === 'pengolahan') && (
-                                <button onClick={() => setShowCreateModal(true)} className="w-full md:w-auto bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-emerald-500/30 transition flex items-center justify-center gap-2 transform hover:-translate-y-0.5">
-                                    <i className="fas fa-plus-circle text-lg"></i> Buat Paspor
-                                </button>
-                            )}
-                        </div>
-                        
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left border-collapse whitespace-nowrap md:whitespace-normal">
-                                <thead>
-                                    <tr className="border-b-2 border-slate-200 text-[10px] md:text-xs text-slate-400 uppercase tracking-widest font-bold">
-                                        <th className="pb-4 px-2">ID Publik / Paspor</th>
-                                        <th className="pb-4 px-2">Posisi / Rantai</th>
-                                        <th className="pb-4 px-2">Bobot</th>
-                                        <th className="pb-4 px-2">Kondisi (R1-R6)</th>
-                                        <th className="pb-4 px-2 text-right">Tindakan</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {filteredLots.map((lot) => (
-                                        <tr key={lot.id} className="border-b border-slate-100 hover:bg-white/60 transition duration-200 group">
-                                            <td className="py-4 px-2">
-                                                <div className="font-bold text-situna-dark text-sm bg-blue-50 px-2.5 py-1 rounded inline-block mb-1 border border-blue-100 font-mono tracking-tight">{lot.id}</div>
-                                                <div className="text-[10px] text-slate-400 font-mono tracking-wider">{lot.passportNo}</div>
-                                            </td>
-                                            <td className="py-4 px-2">
-                                                <div className="text-sm text-slate-800 font-bold">{lot.source}</div>
-                                                <div className="text-[10px] text-slate-500 mt-0.5 font-bold uppercase bg-slate-100 px-2 py-0.5 rounded inline-block">Tahap {lot.currentStage}</div>
-                                            </td>
-                                            <td className="py-4 px-2">
-                                                <div className="text-base font-black text-slate-800">{lot.initialWeight} <span className="text-xs text-slate-400 font-normal">kg</span></div>
-                                            </td>
-                                            <td className="py-4 px-2">
-                                                <StatusBadge type="evidence" status={lot.axisA_evidence} />
-                                            </td>
-                                            <td className="py-4 px-2 text-right">
-                                                <button 
-                                                    onClick={() => onViewLot(lot)}
-                                                    className="bg-white border-2 border-slate-200 text-slate-600 hover:border-situna-main hover:bg-situna-main hover:text-white px-5 py-2 rounded-xl text-xs font-bold transition shadow-sm"
-                                                >
-                                                    LIHAT DETAIL
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                    {filteredLots.length === 0 && (
-                                        <tr><td colSpan="5" className="py-12 text-center text-slate-400 font-medium">Tidak ada data Paspor yang cocok dengan pencarian.</td></tr>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    {/* QR Scanner Modal */}
-                    {showQRScanner && (
-                        <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center fade-in px-4">
-                            <div className="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl">
-                                <div className="flex justify-between items-center mb-4">
-                                    <h3 className="text-xl font-bold text-slate-800"><i className="fas fa-camera text-situna-main mr-2"></i>Arahkan Kamera ke QR</h3>
-                                    <button onClick={() => setShowQRScanner(false)} className="text-slate-400 hover:text-rose-500 text-2xl"><i className="fas fa-times"></i></button>
-                                </div>
-                                <div id="qr-reader"></div>
-                                <p className="text-xs text-center text-slate-500 mt-4">Sistem akan memindai ID berformat SITUNA-XXXXXX secara otomatis.</p>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Modal Create Paspor */}
-                    {showCreateModal && (
-                        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center fade-in px-4">
-                            <div className="bg-white rounded-3xl p-6 md:p-8 w-full max-w-lg shadow-2xl border border-white">
-                                <div className="flex justify-between items-center mb-8 border-b pb-4">
-                                    <h3 className="text-2xl font-bold text-slate-800 flex items-center gap-2"><i className="fas fa-plus-circle text-emerald-500"></i> Buat Paspor Lot</h3>
-                                    <button onClick={() => setShowCreateModal(false)} className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition"><i className="fas fa-times"></i></button>
-                                </div>
-                                <form onSubmit={handleCreateSubmit} className="space-y-5">
-                                    <div>
-                                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Spesies Tuna</label>
-                                        <select value={formData.species} onChange={e => setFormData({...formData, species: e.target.value})} className="w-full border-2 border-slate-200 rounded-xl py-3 px-4 focus:ring-2 focus:ring-situna-main outline-none bg-slate-50 font-medium text-slate-700">
-                                            <option value="Thunnus albacares (Madidihang)">Thunnus albacares (Madidihang / Yellowfin)</option>
-                                            <option value="Thunnus obesus (Mata Besar)">Thunnus obesus (Mata Besar / Bigeye)</option>
-                                            <option value="Katsuwonus pelamis (Cakalang)">Katsuwonus pelamis (Cakalang / Skipjack)</option>
-                                        </select>
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Sumber (Kapal/UPI)</label>
-                                            <input type="text" required value={formData.source} onChange={e => setFormData({...formData, source: e.target.value})} className="w-full border-2 border-slate-200 rounded-xl py-3 px-4 focus:ring-2 focus:ring-situna-main outline-none bg-slate-50 font-medium text-slate-700" placeholder="Nama Entitas..." />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Bobot Masuk (kg)</label>
-                                            <input type="number" required min="1" step="0.1" value={formData.weight} onChange={e => setFormData({...formData, weight: e.target.value})} className="w-full border-2 border-slate-200 rounded-xl py-3 px-4 focus:ring-2 focus:ring-situna-main outline-none bg-slate-50 font-bold text-slate-800" placeholder="0.0" />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tahapan Operasi</label>
-                                        <select value={formData.currentStage} onChange={e => setFormData({...formData, currentStage: e.target.value})} className="w-full border-2 border-slate-200 rounded-xl py-3 px-4 focus:ring-2 focus:ring-situna-main outline-none bg-slate-50 font-medium text-slate-700">
-                                            <option value={1}>1. Hulu (Laut / Kapal Penangkapan)</option>
-                                            <option value={2}>2. Pendaratan (TPI / Pelabuhan)</option>
-                                            <option value={3}>3. Pengolahan (UPI / Pabrik)</option>
-                                        </select>
-                                    </div>
-                                    <div className="pt-4 flex gap-3">
-                                        <button type="submit" className="w-full py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition shadow-lg shadow-emerald-500/30 text-lg">Terbitkan Paspor Digital</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            );
-        };
-
-        const LotDetail = ({ lot, user, onBack, onUpdateQuarantine, onDeleteLot, showToast }) => {
-            const [activeTab, setActiveTab] = React.useState('ringkasan');
-            const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
-            const qrCanvasRef = React.useRef(null);
-
-            // Generate Physical QR Code exactly when tab is 'ringkasan'
-            React.useEffect(() => {
-                if (activeTab === 'ringkasan' && qrCanvasRef.current && window.QRious) {
-                    new QRious({
-                        element: qrCanvasRef.current,
-                        value: `https://situna.go.id/verify/${lot.id}`, // Simulasi URL asli
-                        size: 160,
-                        level: 'H',
-                        background: 'white',
-                        foreground: '#0f172a'
-                    });
-                }
-            }, [activeTab, lot]);
-
-            const handleQuarantineAction = (status) => {
-                if (user.role !== 'barantin') {
-                    showToast('Akses Ditolak: Hanya petugas Barantin yang berwenang.', 'error'); 
-                    return;
-                }
-                onUpdateQuarantine(lot.id, status);
-            };
-
-            return (
-                <div className="min-h-screen p-4 md:p-8 z-10 relative fade-in max-w-5xl mx-auto pb-20">
-                    <ConfirmModal 
-                        isOpen={showDeleteConfirm}
-                        title="Hapus Permanen?"
-                        message={`Anda yakin ingin menghapus data paspor ${lot.id} beserta silsilahnya dari sistem?`}
-                        onCancel={() => setShowDeleteConfirm(false)}
-                        onConfirm={() => { setShowDeleteConfirm(false); onDeleteLot(lot.id); }}
-                    />
-
-                    {/* Header Navigasi Detail */}
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 bg-white/70 backdrop-blur-md p-4 rounded-3xl border border-white shadow-sm gap-4">
-                        <div className="flex items-center gap-4">
-                            <button onClick={onBack} className="bg-white p-3.5 rounded-2xl shadow-sm text-slate-500 hover:text-situna-main transition border border-slate-100">
-                                <i className="fas fa-arrow-left text-lg"></i>
-                            </button>
-                            <div>
-                                <h2 className="text-xl md:text-2xl font-bold text-slate-800 flex flex-wrap items-center gap-2">
-                                    Detail Lot <span className="bg-gradient-to-r from-situna-dark to-situna-main text-white text-sm px-3 py-1.5 rounded-lg font-mono tracking-wider shadow-sm">{lot.id}</span>
-                                </h2>
-                                <p className="text-xs text-slate-500 font-mono mt-1 font-bold">{lot.passportNo}</p>
-                            </div>
-                        </div>
-                        {user.role === 'admin' && (
-                            <button onClick={() => setShowDeleteConfirm(true)} className="bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-sm border border-rose-100 flex items-center gap-2">
-                                <i className="fas fa-trash-alt"></i>Hapus Record
-                            </button>
-                        )}
-                    </div>
-
-                    {/* Timeline Rantai Pasok */}
-                    <div className="glass-card rounded-3xl p-6 shadow-xl mb-6 border border-white">
-                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">Peta Rantai Pasok Ikan Tuna</h3>
-                        <TraceabilityTimeline currentStage={lot.currentStage} quarantineStatus={lot.axisC_quarantine} />
-                    </div>
-
-                    {/* Pemisahan 3 Sumbu (Aturan R6) */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                        <div className="glass-card p-5 rounded-3xl flex flex-col justify-between border border-white">
-                            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Sumbu A: Kelengkapan Bukti (R1-R5)</h4>
-                            <div><StatusBadge type="evidence" status={lot.axisA_evidence} /></div>
-                        </div>
-                        <div className="glass-card p-5 rounded-3xl flex flex-col justify-between border border-white">
-                            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Sumbu B: Penanganan</h4>
-                            <div><StatusBadge type="handling" status={lot.axisB_handling} /></div>
-                        </div>
-                        <div className="bg-gradient-to-br from-blue-900 to-blue-800 p-5 rounded-3xl flex flex-col justify-between relative overflow-hidden shadow-lg">
-                            <div className="absolute top-0 right-0 bg-amber-400 text-blue-900 text-[8px] font-bold px-3 py-1 rounded-bl-xl shadow-sm">Otoritas Karantina</div>
-                            <h4 className="text-[10px] font-bold text-blue-200 uppercase tracking-widest mb-3">Sumbu C: Keputusan Final (R6)</h4>
-                            <div><StatusBadge type="quarantine" status={lot.axisC_quarantine} /></div>
-                        </div>
-                    </div>
-
-                    {/* Area Konten Utama Bertab */}
-                    <div className="glass-card rounded-3xl overflow-hidden mb-6 shadow-xl border border-white">
-                        <div className="flex border-b border-slate-100 overflow-x-auto bg-white/50 no-scrollbar">
-                            {['ringkasan', 'silsilah_ikan', 'validasi_neraca', 'suhu_logistik', 'jejak_audit'].map(tab => (
-                                <button 
-                                    key={tab}
-                                    onClick={() => setActiveTab(tab)}
-                                    className={`px-6 py-4 text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all border-b-[3px] ${activeTab === tab ? 'border-situna-main text-situna-dark bg-white' : 'border-transparent text-slate-400 hover:text-slate-600 hover:bg-white/30'}`}
-                                >
-                                    {tab.replace('_', ' ')}
-                                </button>
-                            ))}
-                        </div>
-
-                        <div className="p-6 md:p-8 min-h-[400px] bg-white/70">
-                            
-                            {/* TAB 1: RINGKASAN & QR CODE */}
-                            {activeTab === 'ringkasan' && (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 fade-in">
-                                    <div className="space-y-5">
-                                        <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100">
-                                            <label className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">Entitas Sumber</label>
-                                            <p className="text-lg font-bold text-slate-800">{lot.source}</p>
-                                        </div>
-                                        <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100">
-                                            <label className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">Spesies Identifikasi</label>
-                                            <p className="text-base font-bold text-slate-800 italic">{lot.species}</p>
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100">
-                                                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-2">Pencatatan Awal</label>
-                                                <p className="text-sm font-bold text-slate-800 leading-tight">{lot.date.replace(' ', '\n')}</p>
-                                            </div>
-                                            <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-100 relative overflow-hidden">
-                                                <i className="fas fa-weight-hanging absolute -right-2 -bottom-2 text-5xl text-emerald-200 opacity-50"></i>
-                                                <label className="text-[10px] text-emerald-600 font-bold uppercase tracking-widest block mb-1 relative z-10">Bobot Awal</label>
-                                                <p className="text-2xl font-black text-emerald-700 relative z-10">{lot.initialWeight} <span className="text-sm font-bold">kg</span></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div className="bg-slate-50 rounded-3xl p-6 border border-slate-100 flex flex-col items-center justify-center relative overflow-hidden">
-                                        <div className="absolute -right-10 -top-10 w-32 h-32 bg-situna-main rounded-full opacity-10"></div>
-                                        <div className="absolute -left-10 -bottom-10 w-32 h-32 bg-situna-dark rounded-full opacity-10"></div>
-                                        
-                                        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Pindai Untuk Validasi</p>
-                                        <div className="bg-white p-4 rounded-3xl shadow-xl border border-slate-200 mb-6 relative z-10">
-                                            <canvas ref={qrCanvasRef} className="rounded-xl"></canvas>
-                                        </div>
-                                        <p className="text-sm font-bold text-slate-800 font-mono bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm z-10">{lot.id}</p>
-                                        <p className="text-[10px] text-slate-400 mt-3 z-10 text-center max-w-xs">Gunakan kamera smartphone atau aplikasi Barantin untuk memindai QR Code di atas.</p>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* TAB 2: SILSILAH (R1/R3) */}
-                            {activeTab === 'silsilah_ikan' && (
-                                <div className="fade-in">
-                                    <div className="mb-6 p-5 bg-indigo-50 rounded-2xl border border-indigo-100 flex items-start gap-4">
-                                        <div className="bg-indigo-100 w-10 h-10 flex items-center justify-center rounded-xl text-indigo-600 shrink-0"><i className="fas fa-network-wired text-lg"></i></div>
-                                        <div>
-                                            <h4 className="font-bold text-indigo-900 text-sm mb-1">Sistem Pewarisan Otomatis (Aturan R1 & R3)</h4>
-                                            <p className="text-xs text-indigo-700 leading-relaxed">Jika pengepul mencampur ikan dari 3 kapal berbeda, sistem akan mengunci ketiganya sebagai induk. Jika dari 100kg ikan gabungan terdapat 10kg dari kapal bermasalah, maka seluruh lot turunan menanggung status buruk sang induk secara otomatis.</p>
-                                        </div>
-                                    </div>
-                                    <div className="p-6 bg-white rounded-3xl border border-slate-200 font-mono text-sm shadow-sm">
-                                        <div className="text-slate-400 font-bold text-[10px] uppercase tracking-widest mb-4 border-b pb-2">Penelusuran Asal (Trace Backward)</div>
-                                        {lot.parents.length === 0 ? <div className="text-slate-400 italic font-sans text-sm mb-6 flex items-center gap-2"><i className="fas fa-anchor"></i> Titik Nol (Sumber Tangkapan Utama)</div> : (
-                                            <div className="mb-6 pl-4 border-l-2 border-indigo-300">
-                                                <span className="font-bold text-slate-700">{lot.parents[0]}</span> <span className="text-xs text-slate-400 ml-2">(Sumber Induk Utama)</span>
-                                            </div>
-                                        )}
-                                        <div className="bg-gradient-to-r from-situna-dark to-situna-main text-white p-5 rounded-2xl shadow-lg my-6 flex justify-between items-center transform scale-[1.02] z-10 relative">
-                                            <div className="font-bold flex items-center gap-3"><i className="fas fa-box-open text-xl"></i> {lot.id}</div>
-                                            <div className="bg-white/20 px-3 py-1 rounded-lg text-xs font-bold font-sans">Posisi Anda</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* TAB 3: NERACA (R2) */}
-                            {activeTab === 'validasi_neraca' && (
-                                <div className="fade-in space-y-4">
-                                     <div className="p-5 bg-emerald-50 rounded-2xl border border-emerald-100 flex items-start gap-4">
-                                        <div className="bg-emerald-100 w-10 h-10 flex items-center justify-center rounded-xl text-emerald-600 shrink-0"><i className="fas fa-balance-scale text-lg"></i></div>
-                                        <div>
-                                            <h4 className="font-bold text-emerald-900 text-sm mb-1">Validasi Neraca Massa UPI (Aturan R2)</h4>
-                                            <p className="text-xs text-emerald-700 leading-relaxed">Sistem otomatis menghitung masuk-keluar (misal: 100kg utuh wajib jadi 40kg fillet + sisa). Jika perhitungan meleset melebihi toleransi (Contoh: {lot.massBalance.tolerance}%), sistem otomatis memberi tanda "Bertentangan".</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100 text-center">
-                                            <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-2">Total Tercatat Masuk</p>
-                                            <p className="text-4xl font-black text-slate-800">{lot.massBalance.in} <span className="text-sm font-bold text-slate-400">kg</span></p>
-                                        </div>
-                                        <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100 text-center relative overflow-hidden">
-                                            <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-2">Total Diproses/Keluar</p>
-                                            <p className={`text-4xl font-black ${lot.massBalance.status === 'bertentangan' ? 'text-rose-600' : 'text-emerald-600'}`}>{lot.massBalance.out} <span className="text-sm font-bold opacity-50">kg</span></p>
-                                        </div>
-                                    </div>
-
-                                    <div className="bg-slate-900 rounded-3xl p-6 font-mono text-sm shadow-xl text-emerald-400 mt-4 relative overflow-hidden border border-slate-700">
-                                        <div className="absolute right-0 top-0 opacity-10"><i className="fas fa-laptop-code text-8xl m-4"></i></div>
-                                        <div className="text-slate-500 text-xs mb-4 font-bold">// Eksekusi Perhitungan Sistem R2 (Backend)</div>
-                                        <div className="mb-1"><span className="text-slate-400">&gt; Menghitung selisih absolute:</span> | Masuk - Keluar |</div>
-                                        <div className="mb-3">&gt; | {lot.massBalance.in} - {lot.massBalance.out} | = <span className="text-white font-bold">{lot.massBalance.diff} kg</span></div>
-                                        <div className="mb-1 mt-2"><span className="text-slate-400">&gt; Kalkulasi Persentase:</span> ({lot.massBalance.diff} / {lot.massBalance.in}) * 100%</div>
-                                        <div>&gt; = <span className="text-white font-bold">{lot.massBalance.pct}%</span></div>
-                                        <div className={`mt-5 pt-5 border-t border-slate-700 font-bold ${lot.massBalance.pct > lot.massBalance.tolerance ? 'text-rose-400' : 'text-emerald-300'}`}>
-                                            &gt; CEK AMBANG ({lot.massBalance.tolerance}%) =&gt; {lot.massBalance.pct > lot.massBalance.tolerance ? '🚨 BERTENTANGAN (Melebihi Toleransi)' : '✅ MEMADAI (Dalam Batas Aman)'}
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* TAB 4: SUHU & SERAH TERIMA (R4/R5) */}
-                            {activeTab === 'suhu_logistik' && (
-                                <div className="fade-in space-y-6">
-                                    <div className="p-5 bg-amber-50 rounded-2xl border border-amber-100 flex items-start gap-4">
-                                        <div className="bg-amber-100 w-10 h-10 flex items-center justify-center rounded-xl text-amber-600 shrink-0"><i className="fas fa-truck-fast text-lg"></i></div>
-                                        <div>
-                                            <h4 className="font-bold text-amber-900 text-sm mb-1">Serah Terima (R4) & Suhu Transportasi (R5)</h4>
-                                            <p className="text-xs text-amber-700 leading-relaxed">Sopir pengirim dan pabrik penerima wajib validasi ganda. Jika sensor mati (jeda suhu), sistem tidak menolak otomatis, melainkan menandainya "Belum Cukup" agar diinvestigasi manual.</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
-                                        <h4 className="font-bold text-slate-800 text-sm mb-5 border-b border-slate-100 pb-3 flex items-center gap-2"><i className="fas fa-handshake text-situna-main"></i> Status Serah Terima Terakhir</h4>
-                                        <div className="flex flex-col md:flex-row items-center gap-4 justify-between bg-slate-50 p-5 rounded-2xl border border-slate-100">
-                                            <div className="text-center md:text-left flex-1">
-                                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Pihak Pengirim</p>
-                                                <p className="font-bold text-slate-700 text-sm">{lot.handover.sender}</p>
-                                            </div>
-                                            <div className="flex flex-col items-center flex-1">
-                                                {lot.handover.status === 'pending' ? <span className="bg-amber-100 text-amber-700 text-[10px] font-bold px-4 py-1.5 rounded-full shadow-sm"><i className="fas fa-clock mr-1"></i>Menunggu</span> :
-                                                 lot.handover.status === 'conflict' ? <span className="bg-rose-100 text-rose-700 text-[10px] font-bold px-4 py-1.5 rounded-full shadow-sm"><i className="fas fa-times mr-1"></i>Konflik Validasi</span> :
-                                                 <span className="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-4 py-1.5 rounded-full shadow-sm"><i className="fas fa-check-double mr-1"></i>Valid (R4)</span>}
-                                                <div className="h-px w-24 bg-slate-300 mt-3 relative"><div className="absolute right-0 top-1/2 transform -translate-y-1/2 -mt-[0.5px] w-2 h-2 bg-slate-400 rounded-full"></div></div>
-                                            </div>
-                                            <div className="text-center md:text-right flex-1">
-                                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Pihak Penerima</p>
-                                                <p className="font-bold text-slate-700 text-sm">{lot.handover.receiver}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {lot.temperatureGap && (
-                                        <div className="bg-rose-50 border border-rose-200 p-5 rounded-3xl shadow-sm">
-                                            <h4 className="font-bold text-rose-800 text-sm mb-2 flex items-center gap-2"><i className="fas fa-temperature-empty text-rose-500"></i> Peringatan Sensor Suhu</h4>
-                                            <p className="text-xs text-rose-700 mb-4">Terdeteksi kesenjangan rekaman suhu (4 Jam). Status diturunkan ke "Belum Cukup". Menunggu investigasi manual otoritas.</p>
-                                            {/* Dummy Graph */}
-                                            <div className="h-12 w-full flex items-end gap-1 opacity-70">
-                                                <div className="w-1/5 bg-situna-main h-4/5 rounded-t-sm"></div>
-                                                <div className="w-1/5 bg-situna-dark h-full rounded-t-sm"></div>
-                                                <div className="w-1/5 bg-rose-200 h-full border-2 border-dashed border-rose-400 rounded-sm flex items-center justify-center text-[8px] font-bold text-rose-600">GAP</div>
-                                                <div className="w-1/5 bg-situna-dark h-5/6 rounded-t-sm"></div>
-                                                <div className="w-1/5 bg-situna-main h-full rounded-t-sm"></div>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-
-                            {/* TAB 5: AUDIT (R7) */}
-                            {activeTab === 'jejak_audit' && (
-                                <div className="fade-in">
-                                    <div className="p-5 bg-slate-800 rounded-2xl border border-slate-700 flex items-start gap-4 mb-8 shadow-lg">
-                                        <div className="bg-slate-700 w-10 h-10 flex items-center justify-center rounded-xl text-white shrink-0"><i className="fas fa-shield-halved text-lg"></i></div>
-                                        <div>
-                                            <h4 className="font-bold text-white text-sm mb-1">Audit Trail Tak Terhapuskan (Aturan R7)</h4>
-                                            <p className="text-xs text-slate-300 leading-relaxed">Ekosistem bertindak sebagai "hakim absolut". Nilai asli tidak akan pernah hilang. Sistem merekam nilai lama, alasan pengubahan, waktu diubah, dan ID perubah.</p>
-                                        </div>
-                                    </div>
-                                    <div className="relative border-l-2 border-slate-200 ml-5 space-y-8 pb-4">
-                                        {lot.history.map((log, index) => (
-                                            <div key={index} className="relative pl-8 slide-up" style={{animationDelay: `${index * 0.1}s`}}>
-                                                <div className="absolute w-5 h-5 bg-white border-4 border-situna-dark rounded-full -left-[11px] top-1 shadow-sm"></div>
-                                                <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm transition hover:shadow-md">
-                                                    <p className="font-bold text-slate-700 text-sm leading-snug">{log.text}</p>
-                                                    <div className="flex flex-wrap gap-4 mt-3 pt-3 border-t border-slate-50">
-                                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider"><i className="fas fa-user-tag mr-1.5 text-situna-main"></i> {log.actor}</p>
-                                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider"><i className="fas fa-clock mr-1.5 text-situna-main"></i> {log.time}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Barantin Authority Panel (R6) */}
-                    {user.role === 'barantin' && (
-                        <div className="bg-gradient-to-r from-blue-900 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-2xl border border-blue-700 relative overflow-hidden slide-up">
-                            <div className="absolute right-0 top-0 opacity-5 transform scale-150 translate-x-10 -translate-y-10"><i className="fas fa-stamp text-9xl"></i></div>
-                            <div className="relative z-10">
-                                <h3 className="font-bold text-xl mb-2 flex items-center gap-3"><i className="fas fa-gavel text-amber-400 text-2xl"></i> Pemisahan Sumbu Status (Aturan R6)</h3>
-                                <p className="text-xs text-blue-200 mb-6 max-w-3xl leading-relaxed">Indikator penyimpangan suhu dipisah mutlak dari status Karantina. Sistem TIDAK otomatis menyatakan produk Lulus/Tolak berdasarkan kelengkapan logistik. Wewenang absolut menerbitkan sertifikasi Karantina ada pada tombol di bawah ini (Khusus Barantin).</p>
-                                
-                                <div className="flex flex-wrap gap-4">
-                                    <button onClick={() => handleQuarantineAction('dalam_pemeriksaan')} className="bg-white/10 hover:bg-white/20 border border-white/20 px-6 py-3.5 rounded-xl text-sm font-bold transition flex items-center gap-2 backdrop-blur-sm">
-                                        <i className="fas fa-spinner"></i> Tahap Pemeriksaan
-                                    </button>
-                                    <button onClick={() => handleQuarantineAction('lulus')} className="bg-emerald-500 hover:bg-emerald-400 text-white px-6 py-3.5 rounded-xl text-sm font-bold transition shadow-lg shadow-emerald-500/30 flex items-center gap-2">
-                                        <i className="fas fa-check-double text-lg"></i> Sertifikasi Karantina LULUS
-                                    </button>
-                                    <button onClick={() => handleQuarantineAction('ditolak')} className="bg-rose-600 hover:bg-rose-500 text-white px-6 py-3.5 rounded-xl text-sm font-bold transition shadow-lg shadow-rose-600/30 flex items-center gap-2">
-                                        <i className="fas fa-ban text-lg"></i> Tolak / Tahan
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            );
-        };
-
-        const App = () => {
-            const [view, setView] = React.useState('splash'); 
-            const [user, setUser] = React.useState(null);
-            const [lotsData, setLotsData] = React.useState(simulatedLots);
-            const [selectedLot, setSelectedLot] = React.useState(null);
-            const [toast, setToast] = React.useState({ show: false, message: '', type: 'info' });
-
-            const showToast = (message, type = 'info') => {
-                setToast({ show: true, message, type });
-            };
-
-            const handleLogin = (loggedInUser) => {
-                setUser(loggedInUser);
-                setView('dashboard');
-                showToast(`Login berhasil sebagai ${loggedInUser.role.toUpperCase()}`, 'success');
-            };
-
-            const handleLogout = () => {
-                setUser(null);
-                setView('login');
-            };
-
-            // CREATE (Operasi CRUD Tambah)
-            const handleCreateLot = (newLotData) => {
-                const newLot = {
-                    id: generateId(),
-                    passportNo: `PS-2026-${String(lotsData.length + 1).padStart(3, '0')}`,
-                    source: newLotData.source,
-                    species: newLotData.species,
-                    initialWeight: newLotData.initialWeight,
-                    type: 'source',
-                    parents: [],
-                    date: new Date().toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' }),
-                    currentStage: newLotData.currentStage,
-                    axisA_evidence: 'memadai',
-                    axisB_handling: 'tidak_terindikasi',
-                    axisC_quarantine: 'belum_diperiksa',
-                    temperatureGap: false,
-                    massBalance: { in: newLotData.initialWeight, out: newLotData.initialWeight, diff: 0, pct: 0, status: 'memadai', tolerance: 1.0 },
-                    handover: { sender: newLotData.source, receiver: 'Menunggu', status: 'pending' },
-                    history: [
-                        { time: new Date().toLocaleString('id-ID', { timeStyle: 'short' }), text: `Penerbitan Paspor Digital (Tahap ${newLotData.currentStage})`, actor: user.name }
-                    ]
-                };
-                setLotsData([newLot, ...lotsData]); 
-                showToast(`Paspor ${newLot.id} berhasil diterbitkan!`, 'success');
-            };
-
-            // DELETE (Operasi CRUD Hapus)
-            const handleDeleteLot = (lotId) => {
-                setLotsData(lotsData.filter(l => l.id !== lotId));
-                setView('dashboard');
-                showToast(`Paspor ${lotId} telah dihapus permanen.`, 'success');
-            };
-
-            // UPDATE (Operasi CRUD Update Status Karantina R6)
-            const handleUpdateQuarantine = (lotId, newStatus) => {
-                const updatedLots = lotsData.map(l => {
-                    if (l.id === lotId) {
-                        const stage = newStatus === 'lulus' || newStatus === 'ditolak' ? 5 : newStatus === 'dalam_pemeriksaan' ? 4 : l.currentStage;
-                        return { 
-                            ...l, 
-                            axisC_quarantine: newStatus,
-                            currentStage: stage,
-                            history: [...l.history, { 
-                                time: new Date().toLocaleString('id-ID', { timeStyle: 'short' }), 
-                                text: `Wewenang Eksekusi Sumbu C (Karantina) diubah menjadi: ${newStatus.toUpperCase()}`, 
-                                actor: user.name 
-                            }]
-                        };
-                    }
-                    return l;
-                });
-                setLotsData(updatedLots);
-                setSelectedLot(updatedLots.find(l => l.id === lotId));
-                showToast(`Status diperbarui menjadi ${newStatus.toUpperCase()}`, 'success');
-            };
-
-            return (
-                <ErrorBoundary>
-                    <div className="min-h-screen relative overflow-x-hidden selection:bg-situna-main selection:text-white">
-                        <div className="bg-blobs">
-                            <div className="blob blob-1"></div><div className="blob blob-2"></div><div className="blob blob-3"></div>
-                        </div>
-
-                        {toast.show && <Toast message={toast.message} type={toast.type} onClose={() => setToast({...toast, show: false})} />}
-
-                        {view === 'splash' && <SplashScreen onFinish={() => setView('login')} />}
-                        {view === 'login' && <LoginScreen onLogin={handleLogin} />}
-                        {view === 'dashboard' && <Dashboard user={user} lots={lotsData} onViewLot={lot => { setSelectedLot(lot); setView('lot_detail'); }} onLogout={handleLogout} onCreateLot={handleCreateLot} showToast={showToast} />}
-                        {view === 'lot_detail' && <LotDetail lot={selectedLot} user={user} onBack={() => { setSelectedLot(null); setView('dashboard'); }} onUpdateQuarantine={handleUpdateQuarantine} onDeleteLot={handleDeleteLot} showToast={showToast} />}
-                    </div>
-                </ErrorBoundary>
-            );
-        };
-
-        const rootElement = document.getElementById('root');
-        const root = ReactDOM.createRoot(rootElement);
-        root.render(<App />);
-    </script>
-</body>
-</html>
-
-<!-- ... existing code ... -->
 <body>
     <div id="root"></div>
 
     <script type="text/babel">
         const { useState, useEffect, useRef, useMemo } = React;
 
-        /* STREAMING_CHUNK:Database & Configs (R1-R7 Enabled)... */
+        /* STREAMING_CHUNK:Database & Configs... */
         const generateID = () => `SITUNA-${Math.floor(100000 + Math.random() * 900000)}`;
 
+        // Kredensial Database
         const usersDB = [
             { id: 'u1', username: 'admin', password: '123', role: 'admin', name: 'Administrator Pusat' },
             { id: 'u2', username: 'karantina', password: '123', role: 'karantina', name: 'Petugas Barantin' },
             { id: 'u3', username: 'nelayan', password: '123', role: 'nelayan', name: 'Kapten Kapal' },
             { id: 'u4', username: 'pengolah', password: '123', role: 'pengolah', name: 'Pabrik Pengolah' }
         ];
+
+        const STAGES = { 1: "Tangkapan Terdaftar", 2: "Selesai Diproses (UPI)", 3: "Dalam Inspeksi", 4: "Lulus Ekspor" };
 
         /* STREAMING_CHUNK:Global Components & Storage Hook... */
         const Toast = ({ message, type, onClose }) => {
@@ -1131,16 +94,16 @@
 
         const useSharedDatabase = () => {
             const [lots, setLots] = useState(() => {
-                const saved = localStorage.getItem('situna_db_v3');
+                const saved = localStorage.getItem('situna_db_final');
                 return saved ? JSON.parse(saved) : [];
             });
-            const channel = useMemo(() => new BroadcastChannel('situna_sync_v3'), []);
+            const channel = useMemo(() => new BroadcastChannel('situna_sync_final'), []);
 
             useEffect(() => {
                 channel.onmessage = (event) => {
                     if (event.data.type === 'SYNC') {
                         setLots(event.data.payload);
-                        localStorage.setItem('situna_db_v3', JSON.stringify(event.data.payload));
+                        localStorage.setItem('situna_db_final', JSON.stringify(event.data.payload));
                     }
                 };
                 return () => channel.close();
@@ -1148,7 +111,7 @@
 
             const updateDB = (newLots) => {
                 setLots(newLots);
-                localStorage.setItem('situna_db_v3', JSON.stringify(newLots));
+                localStorage.setItem('situna_db_final', JSON.stringify(newLots));
                 channel.postMessage({ type: 'SYNC', payload: newLots });
             };
             return [lots, updateDB];
@@ -1157,6 +120,30 @@
         const Badge = ({ label, color }) => (
             <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${color}`}>{label}</span>
         );
+
+        /* STREAMING_CHUNK:Splash Screen... */
+        const SplashScreen = ({ onFinish }) => {
+            useEffect(() => {
+                const timer = setTimeout(onFinish, 2500);
+                return () => clearTimeout(timer);
+            }, [onFinish]);
+
+            return (
+                <div className="flex flex-col items-center justify-center min-h-screen text-white fade-in relative z-10">
+                    <div className="bg-white/20 p-6 rounded-full backdrop-blur-md mb-6 shadow-xl border border-white/30 transform transition hover:scale-105">
+                        <img src="./logo.png" alt="SITUNA Logo" className="w-28 h-28 object-contain drop-shadow-lg" onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/150x150/0077b6/ffffff?text=Logo'; }} />
+                    </div>
+                    <h1 className="text-5xl font-display font-bold tracking-tight mb-2 drop-shadow-md">SITUNA</h1>
+                    <p className="text-lg font-medium max-w-xs text-center leading-tight mb-12 drop-shadow">
+                        SISTEM INFORMASI<br/>KETERTELUSURAN IKAN TUNA<br/>NASIONAL
+                    </p>
+                    <div className="absolute bottom-10 flex flex-col items-center">
+                        <div className="w-10 h-10 border-4 border-t-white border-white/20 rounded-full animate-spin mb-4"></div>
+                        <p className="text-sm font-semibold tracking-wider opacity-90 drop-shadow">BADAN KARANTINA INDONESIA</p>
+                    </div>
+                </div>
+            );
+        };
 
         /* STREAMING_CHUNK:Login Screen... */
         const LoginScreen = ({ onLogin }) => {
@@ -1167,15 +154,15 @@
             const handleLogin = (e) => {
                 e.preventDefault();
                 const u = usersDB.find(x => x.username === username && x.password === password);
-                if (u) onLogin(u); else setError('Kredensial tidak valid!');
+                if (u) onLogin(u); else setError('Username atau password salah!');
             };
 
             return (
                 <div className="flex items-center justify-center min-h-screen z-10 relative px-4">
                     <div className="glass-card p-10 rounded-3xl w-full max-w-md fade-in relative overflow-hidden">
                         <div className="text-center mb-8">
-                            <div className="bg-situna-dark w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white text-3xl shadow-lg">
-                                <i className="fas fa-passport"></i>
+                            <div className="w-24 h-24 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg overflow-hidden bg-white/50 backdrop-blur-sm border border-white">
+                                <img src="./logo.png" alt="SITUNA Logo" className="w-full h-full object-contain p-2" onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/100x100/0077b6/ffffff?text=SITUNA'; }} />
                             </div>
                             <h2 className="text-3xl font-display font-bold text-situna-dark">SITUNA Login</h2>
                             <p className="text-xs text-gray-500 mt-2">Arsitektur Audit R1-R7 Aktif</p>
@@ -1184,7 +171,7 @@
                         <form onSubmit={handleLogin} className="space-y-4">
                             <input type="text" required value={username} onChange={e => setUsername(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-situna-main text-sm" placeholder="Username (cth: nelayan)" />
                             <input type="password" required value={password} onChange={e => setPassword(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-situna-main text-sm" placeholder="Password (123)" />
-                            <button type="submit" className="w-full bg-situna-dark hover:bg-situna-main text-white font-bold py-3.5 rounded-xl transition shadow-lg mt-2">Otorisasi Sistem</button>
+                            <button type="submit" className="w-full bg-situna-dark hover:bg-situna-main text-white font-bold py-3.5 rounded-xl transition shadow-lg mt-2">Masuk Sistem</button>
                         </form>
                     </div>
                 </div>
@@ -1194,35 +181,23 @@
         /* STREAMING_CHUNK:Dashboard Component... */
         const Dashboard = ({ user, lots, updateLots, onLogout, showToast, onViewDetail }) => {
             const [showCreateModal, setShowCreateModal] = useState(false);
-            const [form, setForm] = useState({ species: 'Thunnus albacares', weight: '', wpp: '', temp: '' });
+            const [form, setForm] = useState({ species: 'Thunnus albacares', weight: '', wpp: '', temp: '', docName: '' });
 
             const handleCreate = (e) => {
                 e.preventDefault();
                 const newLot = {
-                    id: generateID(),
-                    species: form.species,
-                    weight: parseFloat(form.weight),
-                    catchInfo: { wpp: form.wpp, temp: form.temp },
-                    parents: [], type: 'source',
-                    
-                    // R6: Tiga Sumbu Dipisahkan
-                    axisA: 'memadai', // Kelengkapan Bukti
-                    axisB: 'tidak_terindikasi', // Penyimpangan Penanganan
-                    axisC: 'belum_diperiksa', // Status Karantina
-
-                    // R4: Konfirmasi Serah Terima
+                    id: generateID(), stage: 1, type: 'source', parents: [],
+                    species: form.species, weight: parseFloat(form.weight),
+                    catchInfo: { wpp: form.wpp, temp: form.temp, doc: form.docName || 'Logbook_SHTI.pdf' },
+                    axisA: 'memadai', axisB: 'tidak_terindikasi', axisC: 'belum_diperiksa',
                     handover: { status: 'Di Pelabuhan', sender: user.name, receiver: null, senderW: parseFloat(form.weight), receiverW: null },
-                    
-                    // R2 & R5: Data Neraca & Suhu
-                    processInfo: null, tempGap: false,
-                    
-                    creator: user.name,
-                    createdAt: new Date().toLocaleString('id-ID'),
-                    history: [{ time: new Date().toLocaleString('id-ID'), actor: user.name, action: `[HULU] Registrasi tangkapan. Bobot: ${form.weight}kg, WPP: ${form.wpp}` }]
+                    processInfo: null, labInfo: null, tempGap: false,
+                    creator: user.name, createdAt: new Date().toLocaleString('id-ID'),
+                    history: [{ time: new Date().toLocaleString('id-ID'), actor: user.name, action: `[HULU] Registrasi tangkapan. WPP: ${form.wpp}, Suhu: ${form.temp}°C, Bobot: ${form.weight}kg` }]
                 };
                 updateLots([newLot, ...lots]);
                 setShowCreateModal(false);
-                setForm({ species: 'Thunnus albacares', weight: '', wpp: '', temp: '' });
+                setForm({ species: 'Thunnus albacares', weight: '', wpp: '', temp: '', docName: '' });
                 showToast(`Paspor ${newLot.id} tercatat di sistem utama!`, 'success');
             };
 
@@ -1236,28 +211,32 @@
                                 <p className="text-xs text-gray-500 font-medium">Sistem Ketertelusuran Berbasis Audit (R1-R7)</p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-4 bg-white/70 p-2 pl-5 rounded-2xl border border-white">
-                            <div className="text-right hidden sm:block">
+                        
+                        {/* Pojok Kanan Header Dashboard dengan logo.png */}
+                        <div className="flex items-center gap-3 bg-white/70 p-2 pl-4 rounded-2xl border border-white">
+                            <img src="./logo.png" alt="SITUNA Logo" className="w-10 h-10 object-contain hidden sm:block drop-shadow-sm" onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/40x40/0077b6/ffffff?text=Logo'; }} />
+                            <div className="text-right hidden sm:block border-l border-gray-200 pl-3">
                                 <p className="text-sm font-bold text-gray-800">{user.name}</p>
                                 <p className="text-[10px] font-bold text-situna-main uppercase tracking-wider">{user.role}</p>
                             </div>
-                            <button onClick={onLogout} className="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white w-10 h-10 rounded-xl transition flex items-center justify-center"><i className="fas fa-power-off"></i></button>
+                            <button onClick={onLogout} className="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white w-10 h-10 rounded-xl transition flex items-center justify-center ml-1" title="Keluar"><i className="fas fa-power-off"></i></button>
                         </div>
                     </header>
 
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-xl font-bold text-gray-800">Daftar Paspor Lot</h2>
                         {(user.role === 'nelayan' || user.role === 'admin') && (
-                            <button onClick={() => setShowCreateModal(true)} className="bg-situna-dark hover:bg-situna-main text-white px-5 py-2.5 rounded-xl font-bold transition shadow-lg">
-                                <i className="fas fa-plus mr-2"></i> Pendaratan Baru
+                            <button onClick={() => setShowCreateModal(true)} className="bg-situna-dark hover:bg-situna-main text-white px-5 py-2.5 rounded-xl font-bold transition shadow-lg flex items-center gap-2">
+                                <i className="fas fa-plus"></i> <span className="hidden md:inline">Registrasi Tangkapan</span>
                             </button>
                         )}
                     </div>
 
                     {lots.length === 0 ? (
                         <div className="glass-card rounded-3xl p-12 text-center border-dashed border-2 border-gray-300">
-                            <h3 className="text-xl font-bold text-gray-700 mb-2">Buku Besar Kosong</h3>
-                            <p className="text-gray-500 text-sm">Masuk sebagai Nelayan untuk memulai pencatatan hulu.</p>
+                            <div className="w-20 h-20 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl"><i className="fas fa-ship"></i></div>
+                            <h3 className="text-xl font-bold text-gray-700 mb-2">Area Pendaratan Kosong</h3>
+                            <p className="text-gray-500 text-sm">Masuk sebagai Nelayan untuk memulai pencatatan rantai pasok.</p>
                         </div>
                     ) : (
                         <div className="glass-card rounded-3xl overflow-hidden shadow-lg">
@@ -1265,8 +244,8 @@
                                 <thead className="bg-gray-50 border-b border-gray-100">
                                     <tr className="text-xs text-gray-400 uppercase font-bold">
                                         <th className="p-5">ID Paspor</th>
-                                        <th className="p-5">Spesies / Info</th>
-                                        <th className="p-5">Status Karantina (Sumbu C)</th>
+                                        <th className="p-5">Spesies / Asal</th>
+                                        <th className="p-5">Tahap & Bobot</th>
                                         <th className="p-5 text-right">Aksi</th>
                                     </tr>
                                 </thead>
@@ -1275,14 +254,15 @@
                                         <tr key={lot.id} className="hover:bg-blue-50/30 transition">
                                             <td className="p-5">
                                                 <div className="font-bold text-situna-dark text-sm">{lot.id}</div>
-                                                <div className="text-[10px] text-gray-400 mt-1">{lot.type.toUpperCase()}</div>
+                                                <div className="text-[10px] text-gray-400 mt-1">{lot.createdAt}</div>
                                             </td>
                                             <td className="p-5">
                                                 <div className="font-bold text-gray-800 text-sm">{lot.species}</div>
-                                                <div className="text-xs text-gray-500 mt-0.5">Bobot: {lot.weight}kg</div>
+                                                <div className="text-xs text-gray-500 mt-0.5">WPP: {lot.catchInfo?.wpp || '-'}</div>
                                             </td>
                                             <td className="p-5">
-                                                <Badge label={lot.axisC.replace('_', ' ')} color={lot.axisC === 'lulus' ? 'bg-green-100 text-green-700' : lot.axisC === 'ditolak' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'} />
+                                                <Badge label={STAGES[lot.stage]} color={lot.stage === 4 ? 'bg-green-100 text-green-700' : lot.stage === 3 ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700'} />
+                                                <div className="text-xs font-bold text-gray-600 mt-1">{lot.weight} kg</div>
                                             </td>
                                             <td className="p-5 text-right">
                                                 <button onClick={() => onViewDetail(lot.id)} className="bg-white border border-gray-200 hover:border-situna-main text-situna-dark px-4 py-2 rounded-xl text-xs font-bold transition shadow-sm">Detail Terpadu</button>
@@ -1294,19 +274,24 @@
                         </div>
                     )}
 
-                    {/* Modal Create (Nelayan) */}
+                    {/* Modal Create */}
                     {showCreateModal && (
                         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in">
-                            <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-                                <h3 className="text-xl font-bold text-gray-800 mb-4"><i className="fas fa-ship text-situna-dark mr-2"></i> Pendaratan Tangkapan</h3>
+                            <div className="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl overflow-y-auto max-h-[90vh]">
+                                <h3 className="text-xl font-bold text-gray-800 mb-2 flex items-center gap-3"><i className="fas fa-ship text-situna-dark"></i> Pendaratan Ikan</h3>
+                                <p className="text-xs text-gray-500 mb-6">Data ini menjadi silsilah awal yang tidak bisa diubah.</p>
+                                
                                 <form onSubmit={handleCreate} className="space-y-4">
-                                    <select value={form.species} onChange={e=>setForm({...form, species: e.target.value})} className="w-full bg-gray-50 border rounded-xl p-3 text-sm"><option>Thunnus albacares (Yellowfin)</option><option>Thunnus obesus (Bigeye)</option></select>
-                                    <input required type="text" value={form.wpp} onChange={e=>setForm({...form, wpp: e.target.value})} placeholder="WPP RI (Cth: 714)" className="w-full bg-gray-50 border rounded-xl p-3 text-sm" />
-                                    <input required type="number" step="0.1" value={form.temp} onChange={e=>setForm({...form, temp: e.target.value})} placeholder="Suhu Pendaratan (°C)" className="w-full bg-gray-50 border rounded-xl p-3 text-sm" />
-                                    <input required type="number" step="0.1" value={form.weight} onChange={e=>setForm({...form, weight: e.target.value})} placeholder="Bobot Aktual (kg)" className="w-full bg-gray-50 border rounded-xl p-3 text-lg font-bold" />
-                                    <div className="flex gap-2 pt-4 border-t">
-                                        <button type="button" onClick={() => setShowCreateModal(false)} className="flex-1 py-3 bg-gray-100 rounded-xl text-sm font-bold">Batal</button>
-                                        <button type="submit" className="flex-1 py-3 bg-situna-dark text-white rounded-xl text-sm font-bold">Simpan</button>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="col-span-2"><label className="block text-xs font-bold text-gray-500 uppercase mb-2">Spesies Ikan</label><select value={form.species} onChange={e=>setForm({...form, species: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 text-sm"><option value="Thunnus albacares (Yellowfin)">Yellowfin Tuna</option><option value="Thunnus obesus (Bigeye)">Bigeye Tuna</option></select></div>
+                                        <div><label className="block text-xs font-bold text-gray-500 uppercase mb-2">Kode WPP RI</label><input required type="text" value={form.wpp} onChange={e=>setForm({...form, wpp: e.target.value})} placeholder="Cth: 714" className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 text-sm" /></div>
+                                        <div><label className="block text-xs font-bold text-gray-500 uppercase mb-2">Suhu Palka (°C)</label><input required type="number" step="0.1" value={form.temp} onChange={e=>setForm({...form, temp: e.target.value})} placeholder="-18" className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 text-sm" /></div>
+                                        <div className="col-span-2"><label className="block text-xs font-bold text-gray-500 uppercase mb-2">Bobot Pendaratan (kg)</label><input required type="number" step="0.1" value={form.weight} onChange={e=>setForm({...form, weight: e.target.value})} placeholder="Bobot aktual" className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 font-bold text-lg" /></div>
+                                        <div className="col-span-2"><label className="block text-xs font-bold text-gray-500 uppercase mb-2">Lampirkan Bukti (Logbook/SHTI)</label><div className="border-2 border-dashed border-gray-300 rounded-xl p-4 bg-gray-50"><input type="file" onChange={e => setForm({...form, docName: e.target.files[0]?.name})} className="text-xs text-gray-500 w-full" accept=".pdf,image/*" /></div></div>
+                                    </div>
+                                    <div className="flex gap-3 pt-4 border-t border-gray-100">
+                                        <button type="button" onClick={() => setShowCreateModal(false)} className="flex-1 py-3 rounded-xl font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 transition">Batal</button>
+                                        <button type="submit" className="flex-1 py-3 rounded-xl font-bold text-white bg-situna-dark hover:bg-situna-main transition shadow-md">Terbitkan Paspor</button>
                                     </div>
                                 </form>
                             </div>
@@ -1316,286 +301,336 @@
             );
         };
 
-        /* STREAMING_CHUNK:Detail View (Implementing R1-R7 logic in Tabs)... */
+        /* STREAMING_CHUNK:Detail View (Implementing R1-R7 logic in Tabs & PDF Generator)... */
         const LotDetail = ({ lotId, lots, user, onBack, updateLots, showToast }) => {
             const lot = lots.find(l => l.id === lotId);
-            const [tab, setTab] = useState('Sumbu & Info (R6)');
+            const [tab, setTab] = useState('Inspeksi & Lab (R6)');
 
-            // Forms Data
-            const [serahForm, setSerahForm] = useState({ rWeight: '', rSeal: 'Aman' });
+            const qrRef = useRef(null);
+            const [serahForm, setSerahForm] = useState({ rWeight: '' });
             const [neracaForm, setNeracaForm] = useState({ prod: '', byprod: '', shrink: '' });
             const [pecahForm, setPecahForm] = useState({ w1: '', w2: '' });
+            const [labForm, setLabForm] = useState({ histamine: '', salmonella: 'Negatif', metals: 'Aman' });
             const [koreksiForm, setKoreksiForm] = useState({ field: 'Bobot', oldVal: lot?.weight || '', newVal: '', reason: '' });
+
+            useEffect(() => {
+                if (qrRef.current && window.QRious) {
+                    new QRious({ element: qrRef.current, value: `https://situna.go.id/verify/${lot.id}`, size: 130, background: 'white', foreground: '#0f172a' });
+                }
+            }, [lot]);
 
             if (!lot) return null;
 
-            // --- R4: Serah Terima ---
+            // --- Handlers R1-R7 ---
             const handleKirim = () => {
-                const updated = { ...lot, handover: { ...lot.handover, status: 'Menunggu Penerima' }, history: [...lot.history, { time: new Date().toLocaleString(), actor: user.name, action: `[R4] Dikirim ke pihak selanjutnya. Menunggu konfirmasi penerima.`}] };
-                updateLots(lots.map(l => l.id === lot.id ? updated : l));
-                showToast("Lot dalam perjalanan laut/darat.", "info");
+                const updated = { ...lot, handover: { ...lot.handover, status: 'Menunggu Penerima' }, history: [...lot.history, { time: new Date().toLocaleString(), actor: user.name, action: `[R4] Dikirim ke UPI. Menunggu konfirmasi.`}] };
+                updateLots(lots.map(l => l.id === lot.id ? updated : l)); showToast("Dikirim untuk Serah Terima.", "info");
             };
             const handleTerima = (e) => {
-                e.preventDefault();
-                const rW = parseFloat(serahForm.rWeight);
-                let newAxisA = lot.axisA;
-                if (rW !== lot.handover.senderW) newAxisA = 'belum_cukup'; // Rule R4: Tidak cocok = belum cukup
-                
-                const updated = { ...lot, axisA: newAxisA, handover: { ...lot.handover, status: 'Diterima', receiver: user.name, receiverW: rW }, history: [...lot.history, { time: new Date().toLocaleString(), actor: user.name, action: `[R4] Serah Terima Dikonfirmasi. Bobot Penerima: ${rW}kg. (Status Bukti: ${newAxisA})`}] };
-                updateLots(lots.map(l => l.id === lot.id ? updated : l));
-                showToast("Konfirmasi serah terima disimpan.", "success");
+                e.preventDefault(); const rW = parseFloat(serahForm.rWeight);
+                const updated = { ...lot, axisA: rW !== lot.handover.senderW ? 'belum_cukup' : lot.axisA, handover: { ...lot.handover, status: 'Diterima', receiver: user.name, receiverW: rW }, history: [...lot.history, { time: new Date().toLocaleString(), actor: user.name, action: `[R4] Konfirmasi Terima. Bobot: ${rW}kg.`}] };
+                updateLots(lots.map(l => l.id === lot.id ? updated : l)); showToast("Konfirmasi serah terima disimpan.", "success");
             };
-
-            // --- R2: Neraca Massa ---
             const handleNeraca = (e) => {
-                e.preventDefault();
-                const p = parseFloat(neracaForm.prod); const b = parseFloat(neracaForm.byprod); const s = parseFloat(neracaForm.shrink);
-                const totalOut = p + b + s;
-                const diff = Math.abs(lot.weight - totalOut);
-                const tol = lot.weight * 0.01; // 1% Toleransi
-
-                let newAxisA = lot.axisA;
-                if (diff > tol) newAxisA = 'bertentangan'; // Rule R2: Luar toleransi = bertentangan
-
-                const updated = { ...lot, axisA: newAxisA, processInfo: { product: p, byproduct: b, shrink: s, diff: diff }, history: [...lot.history, { time: new Date().toLocaleString(), actor: user.name, action: `[R2] Uji Neraca. In: ${lot.weight}, Out: ${totalOut}. Selisih: ${diff.toFixed(2)}kg. Status Bukti: ${newAxisA}`}] };
-                updateLots(lots.map(l => l.id === lot.id ? updated : l));
-                showToast("Neraca dihitung secara absolut.", "info");
+                e.preventDefault(); const p = parseFloat(neracaForm.prod); const b = parseFloat(neracaForm.byprod); const s = parseFloat(neracaForm.shrink);
+                const total = p + b + s; const diff = Math.abs(lot.weight - total);
+                const updated = { ...lot, weight: p, stage: 2, axisA: diff > (lot.weight * 0.01) ? 'bertentangan' : lot.axisA, processInfo: { product: p, byproduct: b, shrink: s, diff, original: lot.weight }, history: [...lot.history, { time: new Date().toLocaleString(), actor: user.name, action: `[R2] Uji Neraca UPI. In: ${lot.weight}, Out: ${total}. Selisih: ${diff.toFixed(2)}kg.`}] };
+                updateLots(lots.map(l => l.id === lot.id ? updated : l)); showToast("Proses UPI & Neraca dihitung.", "success");
             };
-
-            // --- R1 & R3: Pemecahan & Silsilah ---
             const handlePecah = (e) => {
-                e.preventDefault();
-                const w1 = parseFloat(pecahForm.w1); const w2 = parseFloat(pecahForm.w2);
-                if (w1 + w2 > lot.weight) { showToast("Gagal: Pecahan melebihi bobot induk!", "error"); return; }
-
-                const childBase = {
-                    type: 'split', parents: [lot.id], axisA: lot.axisA, axisB: lot.axisB, axisC: 'belum_diperiksa', // Rule R3: Mewarisi status terburuk induk (A & B)
-                    handover: { status: 'Di Pabrik', sender: user.name }, processInfo: null, tempGap: false, creator: user.name, createdAt: new Date().toLocaleString('id-ID')
-                };
-                
-                const c1 = { ...childBase, id: generateID(), species: `${lot.species} (Pecahan 1)`, weight: w1, history: [{ time: new Date().toLocaleString(), actor: user.name, action: `[R1] Lot Turunan terbentuk dari Induk ${lot.id}.`}] };
-                const c2 = { ...childBase, id: generateID(), species: `${lot.species} (Pecahan 2)`, weight: w2, history: [{ time: new Date().toLocaleString(), actor: user.name, action: `[R1] Lot Turunan terbentuk dari Induk ${lot.id}.`}] };
-
-                const updatedInduk = { ...lot, history: [...lot.history, { time: new Date().toLocaleString(), actor: user.name, action: `[R1] Lot dipecah menjadi 2 turunan (${c1.id} & ${c2.id}).`}] };
-
-                updateLots([c1, c2, updatedInduk, ...lots.filter(l => l.id !== lot.id)]);
-                showToast("Operasi Pemecahan R1 Berhasil.", "success");
+                e.preventDefault(); const w1 = parseFloat(pecahForm.w1); const w2 = parseFloat(pecahForm.w2);
+                if (w1 + w2 > lot.weight) { showToast("Gagal: Melebihi bobot induk!", "error"); return; }
+                const base = { type: 'split', parents: [lot.id], stage: lot.stage, catchInfo: lot.catchInfo, processInfo: lot.processInfo, axisA: lot.axisA, axisB: lot.axisB, axisC: lot.axisC, handover: lot.handover, tempGap: lot.tempGap, creator: user.name, createdAt: new Date().toLocaleString() };
+                const c1 = { ...base, id: generateID(), species: `${lot.species} (Pecahan 1)`, weight: w1, history: [{ time: new Date().toLocaleString(), actor: user.name, action: `[R1] Lot Turunan dari Induk ${lot.id}.`}] };
+                const c2 = { ...base, id: generateID(), species: `${lot.species} (Pecahan 2)`, weight: w2, history: [{ time: new Date().toLocaleString(), actor: user.name, action: `[R1] Lot Turunan dari Induk ${lot.id}.`}] };
+                const upInduk = { ...lot, history: [...lot.history, { time: new Date().toLocaleString(), actor: user.name, action: `[R1] Dipecah menjadi ${c1.id} & ${c2.id}.`}] };
+                updateLots([c1, c2, upInduk, ...lots.filter(l => l.id !== lot.id)]); showToast("Lot dipecah.", "success");
             };
-
-            // --- R5: Kesenjangan Suhu ---
-            const simulasikanSuhuGap = () => {
-                // Rule R5: Gap = belum cukup. Tidak menyatakan pelanggaran (axisB tetap tidak_terindikasi kecuali diubah Barantin).
-                const updated = { ...lot, tempGap: true, axisA: 'belum_cukup', history: [...lot.history, { time: new Date().toLocaleString(), actor: user.name, action: `[R5] Terdeteksi kesenjangan rekaman suhu (Blank Spot). Status Bukti -> Belum Cukup.`}] };
-                updateLots(lots.map(l => l.id === lot.id ? updated : l));
-                showToast("Simulasi Gap Suhu dijalankan.", "info");
+            const handleLabTest = (e, decision) => {
+                e.preventDefault(); const newStage = decision === 'Lulus' ? 4 : 3;
+                const updated = { ...lot, stage: newStage, axisC: decision.toLowerCase(), labInfo: { ...labForm, decision }, history: [...lot.history, { time: new Date().toLocaleString(), actor: user.name, action: `[R6] Inspeksi Lab. Keputusan: ${decision}. Histamin: ${labForm.histamine}ppm.`}] };
+                updateLots(lots.map(l => l.id === lot.id ? updated : l)); showToast(`Status: ${decision}`, decision === 'Lulus' ? 'success' : 'error');
             };
-
-            // --- R6: Status Karantina ---
-            const updateKarantina = (status) => {
-                const updated = { ...lot, axisC: status, history: [...lot.history, { time: new Date().toLocaleString(), actor: user.name, action: `[R6] Otoritas Barantin merubah Status Karantina menjadi: ${status.toUpperCase()}`}] };
-                updateLots(lots.map(l => l.id === lot.id ? updated : l));
-                showToast("Status Karantina disahkan.", "success");
+            const simulasikanSuhu = () => {
+                const updated = { ...lot, tempGap: true, axisA: 'belum_cukup', history: [...lot.history, { time: new Date().toLocaleString(), actor: user.name, action: `[R5] Terdeteksi gap suhu. Status Bukti -> Belum Cukup.`}] };
+                updateLots(lots.map(l => l.id === lot.id ? updated : l)); showToast("Simulasi Gap Suhu dijalankan.", "info");
             };
-
-            // --- R7: Koreksi Berbukti ---
             const handleKoreksi = (e) => {
                 e.preventDefault();
-                // Rule R7: Menyimpan nilai terdahulu, alasan, waktu, user.
-                const updated = {
-                    ...lot, weight: koreksiForm.field === 'Bobot' ? parseFloat(koreksiForm.newVal) : lot.weight,
-                    axisA: 'memadai', // Reset bukti pasca koreksi sah
-                    history: [...lot.history, { time: new Date().toLocaleString(), actor: user.name, action: `[R7 KOREKSI] Kolom ${koreksiForm.field} diubah dari ${koreksiForm.oldVal} menjadi ${koreksiForm.newVal}. Alasan: ${koreksiForm.reason}`}]
-                };
-                updateLots(lots.map(l => l.id === lot.id ? updated : l));
-                showToast("Jejak koreksi Audit disimpan permanen.", "success");
+                const updated = { ...lot, weight: parseFloat(koreksiForm.newVal), axisA: 'memadai', history: [...lot.history, { time: new Date().toLocaleString(), actor: user.name, action: `[R7 KOREKSI] Bobot diubah dari ${koreksiForm.oldVal} ke ${koreksiForm.newVal}. Alasan: ${koreksiForm.reason}`}] };
+                updateLots(lots.map(l => l.id === lot.id ? updated : l)); showToast("Koreksi Berbukti disimpan.", "success");
             };
 
-            const TABS = ['Sumbu & Info (R6)', 'Serah Terima (R4)', 'Neraca Massa (R2)', 'Silsilah (R1/R3)', 'Suhu (R5)', 'Audit & Koreksi (R7)'];
+            const downloadPDF = () => {
+                showToast("Menyiapkan Sertifikat PDF...", "info");
+                const element = document.getElementById('pdf-certificate-content');
+                const opt = { margin: 0.5, filename: `${lot.id}_HealthCertificate.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
+                html2pdf().set(opt).from(element).save().then(()=> showToast("PDF Diunduh!", "success"));
+            };
+
+            const TABS = ['Inspeksi & Lab (R6)', 'Serah Terima (R4)', 'Neraca Massa (R2)', 'Silsilah (R1/R3)', 'Pemantauan Suhu (R5)', 'Audit Koreksi (R7)'];
 
             return (
-                <div className="min-h-screen p-4 md:p-8 max-w-5xl mx-auto fade-in pb-24">
+                <div className="min-h-screen p-4 md:p-8 max-w-6xl mx-auto fade-in pb-24">
                     <div className="flex items-center gap-4 mb-6">
                         <button onClick={onBack} className="bg-white p-3 rounded-2xl shadow-sm border"><i className="fas fa-arrow-left"></i></button>
-                        <div><h2 className="text-xl font-bold text-gray-800">Dokumen Digital Paspor: <span className="font-mono text-situna-main">{lot.id}</span></h2></div>
+                        <div><h2 className="text-xl font-bold text-gray-800">Paspor: <span className="font-mono text-situna-main">{lot.id}</span></h2></div>
                     </div>
 
-                    <div className="glass-card rounded-3xl overflow-hidden shadow-xl border border-white">
-                        <div className="flex border-b border-gray-200 overflow-x-auto bg-gray-50/50">
-                            {TABS.map(t => (
-                                <button key={t} onClick={() => setTab(t)} className={`px-6 py-4 font-bold text-xs uppercase tracking-wider whitespace-nowrap transition-colors ${tab === t ? 'border-b-2 border-situna-main text-situna-dark bg-white' : 'text-gray-400 hover:bg-gray-100'}`}>{t}</button>
+                    {/* Traceability Stepper */}
+                    <div className="glass-card p-6 rounded-3xl mb-6 shadow-sm border-t-4 border-t-situna-main">
+                        <h4 className="text-sm font-bold text-gray-700 mb-6 uppercase tracking-wider text-center">Rantai Pasok Aktual</h4>
+                        <div className="flex justify-between relative max-w-4xl mx-auto mb-2 px-8">
+                            <div className="absolute top-4 left-16 right-16 h-1 bg-gray-200 z-0">
+                                <div className="h-full bg-situna-main transition-all duration-700" style={{width: `${((lot.stage - 1) / 3) * 100}%`}}></div>
+                            </div>
+                            {[1, 2, 3, 4].map(step => (
+                                <div key={step} className="flex flex-col items-center z-10 w-24">
+                                    <div className={`step-circle text-sm transition-colors duration-500 ${lot.stage >= step ? 'bg-situna-main text-white shadow-md' : 'bg-gray-200 text-gray-500'}`}>
+                                        {lot.stage > step ? <i className="fas fa-check"></i> : step}
+                                    </div>
+                                    <span className={`text-[10px] font-bold uppercase mt-3 text-center ${lot.stage >= step ? 'text-situna-dark' : 'text-gray-400'}`}>
+                                        {step === 1 ? 'Penangkapan' : step === 2 ? 'Pengolahan' : step === 3 ? 'Karantina' : 'Pelepasan'}
+                                    </span>
+                                </div>
                             ))}
                         </div>
-                        
-                        <div className="p-6 md:p-8 min-h-[400px]">
-                            {/* TAB 1: R6 (TIGA SUMBU) */}
-                            {tab === TABS[0] && (
-                                <div className="space-y-6 fade-in">
-                                    <div className="bg-blue-50 text-blue-800 p-4 rounded-xl text-sm border border-blue-100"><i className="fas fa-info-circle mr-2"></i><strong>Aturan R6:</strong> Tiga Sumbu Status dipisahkan. Bukti dan Penanganan terpisah dari Keputusan Hukum Karantina.</div>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <div className="border rounded-xl p-4 bg-white"><h4 className="text-[10px] font-bold text-gray-400 uppercase mb-2">Sumbu A: Kelengkapan Bukti</h4><Badge label={lot.axisA.replace('_', ' ')} color={lot.axisA === 'memadai' ? 'bg-green-100 text-green-700' : lot.axisA === 'belum_cukup' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'} /></div>
-                                        <div className="border rounded-xl p-4 bg-white"><h4 className="text-[10px] font-bold text-gray-400 uppercase mb-2">Sumbu B: Penyimpangan</h4><Badge label={lot.axisB.replace('_', ' ')} color={lot.axisB === 'tidak_terindikasi' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} /></div>
-                                        <div className="border-2 border-blue-200 rounded-xl p-4 bg-blue-50/30 relative"><div className="absolute top-0 right-0 bg-blue-500 text-white text-[8px] font-bold px-2 py-0.5 rounded-bl">Wewenang Barantin</div><h4 className="text-[10px] font-bold text-situna-dark uppercase mb-2">Sumbu C: Status Karantina</h4><Badge label={lot.axisC.replace('_', ' ')} color={lot.axisC === 'lulus' ? 'bg-green-100 text-green-700' : lot.axisC === 'ditolak' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600'} /></div>
-                                    </div>
-                                    <div className="border rounded-xl p-6 bg-gray-50 flex gap-8 items-center">
-                                        <div><h3 className="font-bold text-lg">{lot.species}</h3><p className="text-xs text-gray-500 mt-1">Bobot Sistem: <span className="font-bold text-situna-dark text-lg">{lot.weight} kg</span></p></div>
-                                    </div>
-                                    {user.role === 'karantina' && (
-                                        <div className="flex gap-2 mt-4 pt-4 border-t">
-                                            <button onClick={()=>updateKarantina('dalam_pemeriksaan')} className="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg text-xs font-bold">Mulai Inspeksi</button>
-                                            <button onClick={()=>updateKarantina('lulus')} className="bg-green-500 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md">Nyatakan Lulus</button>
-                                            <button onClick={()=>updateKarantina('ditolak')} className="bg-red-100 text-red-700 px-4 py-2 rounded-lg text-xs font-bold">Tolak Ekspor</button>
-                                        </div>
-                                    )}
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        {/* Info Kiri */}
+                        <div className="lg:col-span-1 space-y-6">
+                            <div className="glass-card p-6 rounded-3xl shadow-sm text-center">
+                                <canvas ref={qrRef} className="rounded-xl mx-auto border p-2 bg-white shadow-sm mb-4"></canvas>
+                                <h3 className="font-bold text-gray-800 text-lg leading-tight">{lot.species}</h3>
+                                <p className="text-xs text-gray-500 mt-1"><i className="fas fa-map-marker-alt text-situna-main mr-1"></i> WPP: {lot.catchInfo?.wpp} | <i className="fas fa-thermometer-half text-situna-main mx-1"></i> {lot.catchInfo?.temp}°C</p>
+                                <div className="mt-4 bg-gray-50 p-4 rounded-xl border flex justify-between items-center text-left">
+                                    <div><p className="text-[10px] font-bold text-gray-400 uppercase">Bobot Tersimpan</p><p className="text-2xl font-black text-situna-dark">{lot.weight} <span className="text-sm">kg</span></p></div>
                                 </div>
-                            )}
+                                <div className="mt-4 text-[10px] text-gray-500 flex justify-center gap-2 items-center bg-blue-50 py-1.5 rounded-lg border border-blue-100">
+                                    <i className="fas fa-paperclip text-situna-main"></i> <span>Lampiran: {lot.catchInfo?.doc}</span>
+                                </div>
+                            </div>
+                        </div>
 
-                            {/* TAB 2: R4 (SERAH TERIMA) */}
-                            {tab === TABS[1] && (
-                                <div className="space-y-6 fade-in">
-                                    <div className="bg-blue-50 text-blue-800 p-4 rounded-xl text-sm border border-blue-100"><i className="fas fa-handshake mr-2"></i><strong>Aturan R4:</strong> Pengirim dan Penerima sama-sama mengonfirmasi bobot. Jika tidak klop, Sumbu A menjadi 'Belum Cukup'.</div>
-                                    
-                                    <div className="flex items-center justify-between border rounded-xl p-4 bg-white relative">
-                                        <div className="text-center flex-1">
-                                            <p className="text-[10px] font-bold text-gray-400 uppercase">PENGIRIM</p>
-                                            <p className="font-bold text-sm mt-1">{lot.handover.sender}</p>
-                                            <p className="text-xs text-gray-500 mt-1">{lot.handover.senderW} kg</p>
-                                        </div>
-                                        <div className="text-2xl text-gray-300"><i className="fas fa-arrow-right"></i></div>
-                                        <div className="text-center flex-1">
-                                            <p className="text-[10px] font-bold text-gray-400 uppercase">PENERIMA</p>
-                                            <p className="font-bold text-sm mt-1">{lot.handover.receiver || '---'}</p>
-                                            <p className="text-xs text-gray-500 mt-1">{lot.handover.receiverW ? `${lot.handover.receiverW} kg` : 'Menunggu'}</p>
-                                        </div>
-                                    </div>
-
-                                    {(user.role === 'nelayan' || user.role === 'pengolah') && lot.handover.status === 'Di Pelabuhan' && (
-                                        <button onClick={handleKirim} className="bg-situna-dark text-white px-4 py-2 rounded-lg text-xs font-bold">Kirim Ke Pihak Lain</button>
-                                    )}
-                                    {user.role === 'pengolah' && lot.handover.status === 'Menunggu Penerima' && (
-                                        <form onSubmit={handleTerima} className="bg-gray-50 border p-4 rounded-xl flex items-end gap-4">
-                                            <div className="flex-1">
-                                                <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Konfirmasi Bobot Terima (kg)</label>
-                                                <input required type="number" step="0.1" value={serahForm.rWeight} onChange={e=>setSerahForm({...serahForm, rWeight: e.target.value})} className="w-full border p-2 rounded text-sm" placeholder={`Pengirim menyatakan ${lot.handover.senderW}kg`} />
+                        {/* Tabs Kanan */}
+                        <div className="lg:col-span-2">
+                            <div className="glass-card rounded-3xl overflow-hidden shadow-xl border border-white">
+                                <div className="flex border-b border-gray-200 overflow-x-auto bg-gray-50/50">
+                                    {TABS.map(t => (
+                                        <button key={t} onClick={() => setTab(t)} className={`px-5 py-4 font-bold text-[11px] uppercase tracking-wider whitespace-nowrap transition-colors ${tab === t ? 'border-b-2 border-situna-main text-situna-dark bg-white' : 'text-gray-400 hover:bg-gray-100'}`}>{t}</button>
+                                    ))}
+                                </div>
+                                
+                                <div className="p-6 md:p-8 min-h-[350px]">
+                                    {/* TAB 1: R6 (LAB / KARANTINA) */}
+                                    {tab === TABS[0] && (
+                                        <div className="space-y-6 fade-in">
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                <div className="border rounded-xl p-3"><h4 className="text-[10px] font-bold text-gray-400 uppercase mb-2">A: Bukti</h4><Badge label={lot.axisA.replace('_', ' ')} color={lot.axisA === 'memadai' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} /></div>
+                                                <div className="border rounded-xl p-3"><h4 className="text-[10px] font-bold text-gray-400 uppercase mb-2">B: Penanganan</h4><Badge label={lot.axisB.replace('_', ' ')} color={lot.axisB === 'tidak_terindikasi' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} /></div>
+                                                <div className="border border-blue-300 rounded-xl p-3 bg-blue-50/50"><h4 className="text-[10px] font-bold text-blue-800 uppercase mb-2">C: Karantina</h4><Badge label={lot.axisC.replace('_', ' ')} color={lot.axisC === 'lulus' ? 'bg-green-500 text-white' : lot.axisC === 'ditolak' ? 'bg-red-500 text-white' : 'bg-blue-200 text-blue-800'} /></div>
                                             </div>
-                                            <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded text-xs font-bold h-[38px] shadow-sm">Konfirmasi Terima</button>
-                                        </form>
-                                    )}
-                                </div>
-                            )}
 
-                            {/* TAB 3: R2 (NERACA MASSA) */}
-                            {tab === TABS[2] && (
-                                <div className="space-y-6 fade-in">
-                                    <div className="bg-blue-50 text-blue-800 p-4 rounded-xl text-sm border border-blue-100"><i className="fas fa-balance-scale mr-2"></i><strong>Aturan R2:</strong> Neraca memeriksa Persamaan (1): In = Produk + Hasil Samping + Susut. Di luar toleransi = Bertentangan.</div>
-                                    
-                                    {lot.processInfo ? (
-                                        <div className="border rounded-xl p-6 bg-white grid grid-cols-2 gap-4 text-center">
-                                            <div className="bg-gray-50 p-3 rounded"><p className="text-[10px] text-gray-400 font-bold uppercase">Bobot Masuk (In)</p><p className="text-lg font-bold">{lot.weight} kg</p></div>
-                                            <div className="bg-green-50 p-3 rounded"><p className="text-[10px] text-green-600 font-bold uppercase">Total Keluar (Out)</p><p className="text-lg font-bold text-green-700">{(lot.processInfo.product + lot.processInfo.byproduct + lot.processInfo.shrink).toFixed(2)} kg</p></div>
-                                            <div className="col-span-2 text-xs text-gray-500 mt-2">Selisih Absolut Perhitungan: <strong>{lot.processInfo.diff.toFixed(2)} kg</strong></div>
+                                            {user.role === 'karantina' && lot.stage >= 2 && lot.stage < 4 && (
+                                                <form onSubmit={(e) => e.preventDefault()} className="bg-gray-50 border p-4 rounded-xl space-y-3">
+                                                    <p className="text-xs font-bold text-gray-700 mb-2 border-b pb-2"><i className="fas fa-microscope text-situna-main mr-2"></i>Formulir Inspeksi & Uji Lab</p>
+                                                    <div className="grid grid-cols-2 gap-3 text-xs">
+                                                        <div><label className="block text-gray-500 mb-1">Histamin (ppm)</label><input type="number" value={labForm.histamine} onChange={e=>setLabForm({...labForm, histamine: e.target.value})} className="w-full border rounded p-2" /></div>
+                                                        <div><label className="block text-gray-500 mb-1">Salmonella</label><select value={labForm.salmonella} onChange={e=>setLabForm({...labForm, salmonella: e.target.value})} className="w-full border rounded p-2"><option>Negatif</option><option>Positif</option></select></div>
+                                                        <div className="col-span-2"><label className="block text-gray-500 mb-1">Logam Berat (Pb/Hg)</label><select value={labForm.metals} onChange={e=>setLabForm({...labForm, metals: e.target.value})} className="w-full border rounded p-2"><option>Aman</option><option>Berbahaya</option></select></div>
+                                                    </div>
+                                                    <div className="flex gap-2 mt-4 pt-2">
+                                                        <button onClick={(e) => handleLabTest(e, 'Ditolak')} className="flex-1 bg-red-100 text-red-700 font-bold py-2 rounded-lg text-xs">Tolak</button>
+                                                        <button onClick={(e) => handleLabTest(e, 'Lulus')} className="flex-1 bg-green-500 text-white font-bold py-2 rounded-lg text-xs shadow-md">Nyatakan Lulus</button>
+                                                    </div>
+                                                </form>
+                                            )}
+                                            {lot.stage === 4 && (
+                                                <button onClick={downloadPDF} className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 rounded-xl transition shadow-lg text-sm flex items-center justify-center gap-2">
+                                                    <i className="fas fa-file-pdf"></i> Unduh Health Certificate (PDF)
+                                                </button>
+                                            )}
                                         </div>
-                                    ) : (
-                                        user.role === 'pengolah' ? (
-                                            <form onSubmit={handleNeraca} className="bg-gray-50 border p-4 rounded-xl grid grid-cols-3 gap-4">
-                                                <div><label className="block text-xs text-gray-500 mb-1">Produk Akhir (kg)</label><input required type="number" step="0.1" value={neracaForm.prod} onChange={e=>setNeracaForm({...neracaForm, prod: e.target.value})} className="w-full border p-2 rounded" /></div>
-                                                <div><label className="block text-xs text-gray-500 mb-1">Hasil Samping (kg)</label><input required type="number" step="0.1" value={neracaForm.byprod} onChange={e=>setNeracaForm({...neracaForm, byprod: e.target.value})} className="w-full border p-2 rounded" /></div>
-                                                <div><label className="block text-xs text-gray-500 mb-1">Susut (kg)</label><input required type="number" step="0.1" value={neracaForm.shrink} onChange={e=>setNeracaForm({...neracaForm, shrink: e.target.value})} className="w-full border p-2 rounded" /></div>
-                                                <button type="submit" className="col-span-3 bg-situna-main text-white py-2 rounded-lg text-sm font-bold shadow-md mt-2">Kalkulasi Persamaan (1)</button>
-                                            </form>
-                                        ) : <p className="text-sm text-gray-400 italic">Belum diproses oleh fasilitas pengolahan (UPI).</p>
-                                    )}
-                                </div>
-                            )}
-
-                            {/* TAB 4: R1/R3 (SILSILAH) */}
-                            {tab === TABS[3] && (
-                                <div className="space-y-6 fade-in">
-                                    <div className="bg-blue-50 text-blue-800 p-4 rounded-xl text-sm border border-blue-100"><i className="fas fa-sitemap mr-2"></i><strong>Aturan R1 & R3:</strong> Pemecahan membentuk relasi Induk-Anak. Turunan mengikuti status terburuk induknya sampai ada koreksi.</div>
-                                    
-                                    <div className="border rounded-xl p-4 bg-white">
-                                        <p className="text-[10px] font-bold text-gray-400 uppercase mb-2">Induk (Parents):</p>
-                                        {lot.parents.length === 0 ? <span className="text-xs text-gray-500 italic">- Ini adalah lot sumber (Hulu) -</span> : 
-                                            <div className="text-xs font-mono bg-gray-50 p-2 rounded border">{lot.parents.join(', ')}</div>
-                                        }
-                                    </div>
-
-                                    {user.role === 'pengolah' && (
-                                        <form onSubmit={handlePecah} className="bg-gray-50 border p-4 rounded-xl flex items-end gap-4 mt-4">
-                                            <div className="flex-1"><label className="block text-xs text-gray-500 mb-1">Bobot Pecahan 1 (kg)</label><input required type="number" step="0.1" value={pecahForm.w1} onChange={e=>setPecahForm({...pecahForm, w1: e.target.value})} className="w-full border p-2 rounded" /></div>
-                                            <div className="flex-1"><label className="block text-xs text-gray-500 mb-1">Bobot Pecahan 2 (kg)</label><input required type="number" step="0.1" value={pecahForm.w2} onChange={e=>setPecahForm({...pecahForm, w2: e.target.value})} className="w-full border p-2 rounded" /></div>
-                                            <button type="submit" className="bg-situna-dark text-white px-4 py-2 rounded text-xs font-bold h-[38px]">Pecah Induk R1</button>
-                                        </form>
-                                    )}
-                                </div>
-                            )}
-
-                            {/* TAB 5: R5 (SUHU) */}
-                            {tab === TABS[4] && (
-                                <div className="space-y-6 fade-in">
-                                    <div className="bg-blue-50 text-blue-800 p-4 rounded-xl text-sm border border-blue-100"><i className="fas fa-temperature-low mr-2"></i><strong>Aturan R5:</strong> Selang waktu tanpa rekaman suhu ditandai 'Belum Cukup', bukan otomatis dianggap pelanggaran penanganan.</div>
-                                    
-                                    <div className="border rounded-xl p-6 bg-white text-center">
-                                        {lot.tempGap ? (
-                                            <div><i className="fas fa-exclamation-triangle text-yellow-500 text-4xl mb-3"></i><h4 className="font-bold text-gray-800">Kesenjangan Rekaman Suhu Terdeteksi</h4><p className="text-xs text-gray-500 mt-2">Ditemukan *Blank Spot* pada log data perangkat. Sumbu Bukti (A) diturunkan ke 'Belum Cukup'.</p></div>
-                                        ) : (
-                                            <div><i className="fas fa-check-circle text-green-500 text-4xl mb-3"></i><h4 className="font-bold text-gray-800">Cakupan Rekaman Suhu Lengkap</h4><p className="text-xs text-gray-500 mt-2">Memenuhi standar Persamaan (2) dokumen teknis.</p></div>
-                                        )}
-                                    </div>
-                                    {user.role === 'admin' && !lot.tempGap && <button onClick={simulasikanSuhuGap} className="w-full bg-yellow-100 text-yellow-700 py-2 rounded-lg font-bold text-xs border border-yellow-200"><i className="fas fa-magic mr-1"></i> (Alat Admin) Simulasikan Sinyal Hilang R5</button>}
-                                </div>
-                            )}
-
-                            {/* TAB 6: R7 (AUDIT KOREKSI) */}
-                            {tab === TABS[5] && (
-                                <div className="space-y-6 fade-in">
-                                    <div className="bg-blue-50 text-blue-800 p-4 rounded-xl text-sm border border-blue-100"><i className="fas fa-shield-alt mr-2"></i><strong>Aturan R7:</strong> Jejak audit tak terhapuskan. Koreksi sah diizinkan dengan menyimpan nilai lama, baru, alasan, dan identitas pengubah.</div>
-                                    
-                                    {user.role === 'admin' && (
-                                        <form onSubmit={handleKoreksi} className="bg-orange-50 border border-orange-200 p-4 rounded-xl grid grid-cols-2 gap-4">
-                                            <div className="col-span-2 text-xs font-bold text-orange-800 uppercase">Panel Koreksi Khusus Administrator</div>
-                                            <div><label className="block text-xs text-orange-700 mb-1">Nilai Terdahulu (Sistem)</label><input readOnly value={koreksiForm.oldVal} className="w-full border border-orange-200 bg-orange-100 p-2 rounded text-orange-600" /></div>
-                                            <div><label className="block text-xs text-orange-700 mb-1">Nilai Koreksi Baru (Valid)</label><input required type="number" step="0.1" value={koreksiForm.newVal} onChange={e=>setKoreksiForm({...koreksiForm, newVal: e.target.value})} className="w-full border p-2 rounded" /></div>
-                                            <div className="col-span-2"><label className="block text-xs text-orange-700 mb-1">Alasan Koreksi (Wajib)</label><input required type="text" value={koreksiForm.reason} onChange={e=>setKoreksiForm({...koreksiForm, reason: e.target.value})} placeholder="Cth: Kesalahan input sensor darat, bukti valid terlampir." className="w-full border p-2 rounded text-sm" /></div>
-                                            <button type="submit" className="col-span-2 bg-orange-500 text-white py-2 rounded-lg text-sm font-bold shadow">Eksekusi Koreksi Berbukti (R7)</button>
-                                        </form>
                                     )}
 
-                                    <div className="relative border-l-2 border-gray-200 ml-3 space-y-4 pb-2">
-                                        {lot.history.slice().reverse().map((h, i) => (
-                                            <div key={i} className="relative pl-5">
-                                                <div className="absolute w-3 h-3 bg-situna-main rounded-full -left-[7px] top-1"></div>
-                                                <div className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm text-xs text-gray-700">
-                                                    <p className="font-medium leading-relaxed">{h.action}</p>
-                                                    <div className="text-[9px] text-gray-400 mt-2 font-bold uppercase"><i className="fas fa-user text-situna-main mr-1"></i> {h.actor} &nbsp;&bull;&nbsp; <i className="fas fa-clock text-situna-main mx-1"></i> {h.time}</div>
+                                    {/* TAB 2: R4 (SERAH TERIMA) */}
+                                    {tab === TABS[1] && (
+                                        <div className="space-y-6 fade-in">
+                                            <div className="flex items-center justify-between border rounded-xl p-4 bg-white relative">
+                                                <div className="text-center flex-1">
+                                                    <p className="text-[10px] font-bold text-gray-400 uppercase">PENGIRIM</p>
+                                                    <p className="font-bold text-sm mt-1">{lot.handover.sender}</p>
+                                                    <p className="text-xs text-gray-500 mt-1">{lot.handover.senderW} kg</p>
+                                                </div>
+                                                <div className="text-2xl text-gray-300"><i className="fas fa-arrow-right"></i></div>
+                                                <div className="text-center flex-1">
+                                                    <p className="text-[10px] font-bold text-gray-400 uppercase">PENERIMA (UPI)</p>
+                                                    <p className="font-bold text-sm mt-1">{lot.handover.receiver || '---'}</p>
+                                                    <p className="text-xs text-gray-500 mt-1">{lot.handover.receiverW ? `${lot.handover.receiverW} kg` : 'Menunggu'}</p>
                                                 </div>
                                             </div>
-                                        ))}
-                                    </div>
+                                            {(user.role === 'nelayan' || user.role === 'admin') && lot.handover.status === 'Di Pelabuhan' && (
+                                                <button onClick={handleKirim} className="bg-situna-dark text-white px-4 py-2 rounded-lg text-xs font-bold w-full">Kirim Ke Pabrik Pengolah</button>
+                                            )}
+                                            {user.role === 'pengolah' && lot.handover.status === 'Menunggu Penerima' && (
+                                                <form onSubmit={handleTerima} className="bg-gray-50 border p-4 rounded-xl flex items-end gap-4">
+                                                    <div className="flex-1"><label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Konfirmasi Bobot Terima (kg)</label><input required type="number" step="0.1" value={serahForm.rWeight} onChange={e=>setSerahForm({...serahForm, rWeight: e.target.value})} className="w-full border p-2 rounded text-sm" placeholder="Bobot Aktual" /></div>
+                                                    <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded text-xs font-bold h-[38px] shadow-sm">Konfirmasi</button>
+                                                </form>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* TAB 3: R2 (NERACA MASSA) */}
+                                    {tab === TABS[2] && (
+                                        <div className="space-y-6 fade-in">
+                                            {lot.processInfo ? (
+                                                <div className="border rounded-xl p-6 bg-white grid grid-cols-2 gap-4 text-center">
+                                                    <div className="bg-gray-50 p-3 rounded"><p className="text-[10px] text-gray-400 font-bold uppercase">Bobot Awal (In)</p><p className="text-lg font-bold">{lot.processInfo.original} kg</p></div>
+                                                    <div className="bg-green-50 p-3 rounded"><p className="text-[10px] text-green-600 font-bold uppercase">Produk Keluar</p><p className="text-lg font-bold text-green-700">{lot.processInfo.product} kg</p></div>
+                                                    <div className="col-span-2 text-xs text-gray-500 mt-2">Selisih Hitungan Persamaan (1): <strong>{lot.processInfo.diff.toFixed(2)} kg</strong></div>
+                                                </div>
+                                            ) : (
+                                                user.role === 'pengolah' && lot.handover.status === 'Diterima' ? (
+                                                    <form onSubmit={handleNeraca} className="bg-gray-50 border p-4 rounded-xl grid grid-cols-3 gap-4">
+                                                        <div><label className="block text-[10px] font-bold text-gray-500 mb-1 uppercase">Produk (kg)</label><input required type="number" step="0.1" value={neracaForm.prod} onChange={e=>setNeracaForm({...neracaForm, prod: e.target.value})} className="w-full border p-2 rounded text-sm" /></div>
+                                                        <div><label className="block text-[10px] font-bold text-gray-500 mb-1 uppercase">Sampingan (kg)</label><input required type="number" step="0.1" value={neracaForm.byprod} onChange={e=>setNeracaForm({...neracaForm, byprod: e.target.value})} className="w-full border p-2 rounded text-sm" /></div>
+                                                        <div><label className="block text-[10px] font-bold text-gray-500 mb-1 uppercase">Susut (kg)</label><input required type="number" step="0.1" value={neracaForm.shrink} onChange={e=>setNeracaForm({...neracaForm, shrink: e.target.value})} className="w-full border p-2 rounded text-sm" /></div>
+                                                        <button type="submit" className="col-span-3 bg-situna-main text-white py-2.5 rounded-lg text-xs font-bold shadow-md mt-2">Kalkulasi Neraca (R2)</button>
+                                                    </form>
+                                                ) : <p className="text-sm text-gray-400 italic text-center py-6">Syarat: Lot harus sudah dikonfirmasi terima oleh UPI.</p>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* TAB 4: R1/R3 (SILSILAH) */}
+                                    {tab === TABS[3] && (
+                                        <div className="space-y-6 fade-in">
+                                            <div className="border rounded-xl p-4 bg-white">
+                                                <p className="text-[10px] font-bold text-gray-400 uppercase mb-2">Induk (Parents):</p>
+                                                {lot.parents.length === 0 ? <span className="text-xs text-gray-500 italic">- Ini adalah lot sumber (Hulu) -</span> : <div className="text-xs font-mono bg-gray-50 p-2 rounded border">{lot.parents.join(', ')}</div>}
+                                            </div>
+                                            {user.role === 'pengolah' && (
+                                                <form onSubmit={handlePecah} className="bg-gray-50 border p-4 rounded-xl flex items-end gap-4 mt-4">
+                                                    <div className="flex-1"><label className="block text-xs text-gray-500 mb-1">Pecahan 1 (kg)</label><input required type="number" step="0.1" value={pecahForm.w1} onChange={e=>setPecahForm({...pecahForm, w1: e.target.value})} className="w-full border p-2 rounded text-sm" /></div>
+                                                    <div className="flex-1"><label className="block text-xs text-gray-500 mb-1">Pecahan 2 (kg)</label><input required type="number" step="0.1" value={pecahForm.w2} onChange={e=>setPecahForm({...pecahForm, w2: e.target.value})} className="w-full border p-2 rounded text-sm" /></div>
+                                                    <button type="submit" className="bg-situna-dark text-white px-4 py-2 rounded text-xs font-bold h-[38px]">Pecah Induk</button>
+                                                </form>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* TAB 5: R5 (SUHU) */}
+                                    {tab === TABS[4] && (
+                                        <div className="space-y-6 fade-in">
+                                            <div className="border rounded-xl p-6 bg-white text-center">
+                                                {lot.tempGap ? (
+                                                    <div><i className="fas fa-exclamation-triangle text-yellow-500 text-4xl mb-3"></i><h4 className="font-bold text-gray-800">Kesenjangan Suhu Terdeteksi</h4><p className="text-xs text-gray-500 mt-2">Ditemukan Blank Spot pada log data. Status Bukti diturunkan.</p></div>
+                                                ) : (
+                                                    <div><i className="fas fa-check-circle text-green-500 text-4xl mb-3"></i><h4 className="font-bold text-gray-800">Cakupan Suhu Lengkap</h4><p className="text-xs text-gray-500 mt-2">Sesuai Persamaan (2) dokumen teknis.</p></div>
+                                                )}
+                                            </div>
+                                            {user.role === 'admin' && !lot.tempGap && <button onClick={simulasikanSuhu} className="w-full bg-yellow-100 text-yellow-700 py-2 rounded-lg font-bold text-xs border border-yellow-200"><i className="fas fa-magic mr-1"></i> Simulasikan Sinyal Hilang (R5)</button>}
+                                        </div>
+                                    )}
+
+                                    {/* TAB 6: R7 (AUDIT KOREKSI) */}
+                                    {tab === TABS[5] && (
+                                        <div className="space-y-6 fade-in">
+                                            {user.role === 'admin' && (
+                                                <form onSubmit={handleKoreksi} className="bg-orange-50 border border-orange-200 p-4 rounded-xl grid grid-cols-2 gap-4 mb-6">
+                                                    <div className="col-span-2 text-xs font-bold text-orange-800 uppercase">Panel Khusus Administrator</div>
+                                                    <div><label className="block text-xs text-orange-700 mb-1">Nilai Lama (Bobot)</label><input readOnly value={koreksiForm.oldVal} className="w-full border border-orange-200 bg-orange-100 p-2 rounded text-orange-600 text-sm" /></div>
+                                                    <div><label className="block text-xs text-orange-700 mb-1">Nilai Baru (Bobot)</label><input required type="number" step="0.1" value={koreksiForm.newVal} onChange={e=>setKoreksiForm({...koreksiForm, newVal: e.target.value})} className="w-full border p-2 rounded text-sm" /></div>
+                                                    <div className="col-span-2"><label className="block text-xs text-orange-700 mb-1">Alasan Koreksi (Wajib)</label><input required type="text" value={koreksiForm.reason} onChange={e=>setKoreksiForm({...koreksiForm, reason: e.target.value})} placeholder="Cth: Kesalahan input sensor, bukti terlampir." className="w-full border p-2 rounded text-sm" /></div>
+                                                    <button type="submit" className="col-span-2 bg-orange-500 text-white py-2 rounded-lg text-xs font-bold shadow">Eksekusi Koreksi Berbukti (R7)</button>
+                                                </form>
+                                            )}
+
+                                            <div className="relative border-l-2 border-gray-200 ml-3 space-y-4 pb-2">
+                                                {lot.history.slice().reverse().map((h, i) => (
+                                                    <div key={i} className="relative pl-5">
+                                                        <div className="absolute w-3 h-3 bg-situna-main rounded-full -left-[7px] top-1"></div>
+                                                        <div className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm text-xs text-gray-700">
+                                                            <p className="font-medium leading-relaxed">{h.action}</p>
+                                                            <div className="text-[9px] text-gray-400 mt-2 font-bold uppercase"><i className="fas fa-user text-situna-main mr-1"></i> {h.actor} &nbsp;&bull;&nbsp; <i className="fas fa-clock text-situna-main mx-1"></i> {h.time}</div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
+                            </div>
                         </div>
                     </div>
+
+                    {/* HIDDEN PDF TEMPLATE */}
+                    {lot.stage === 4 && (
+                        <div id="pdf-certificate-container">
+                            <div id="pdf-certificate-content" style={{ padding: '40px', fontFamily: 'sans-serif', border: '10px solid #0077b6' }}>
+                                <div style={{ textAlign: 'center', borderBottom: '2px solid #ccc', paddingBottom: '20px', marginBottom: '20px' }}>
+                                    <h1 style={{ color: '#0077b6', margin: 0 }}>BADAN KARANTINA INDONESIA</h1>
+                                    <h2 style={{ color: '#333', margin: '5px 0' }}>HEALTH CERTIFICATE / PASPOR KETERTELUSURAN</h2>
+                                    <p style={{ margin: 0, color: '#666' }}>Nomor Seri: {lot.id}</p>
+                                </div>
+                                
+                                <h3>Informasi Tangkapan (Hulu)</h3>
+                                <table style={{ width: '100%', marginBottom: '20px', borderCollapse: 'collapse' }}>
+                                    <tr><td style={{ padding: '8px', border: '1px solid #ddd' }}>Spesies</td><td style={{ padding: '8px', border: '1px solid #ddd', fontWeight: 'bold' }}>{lot.species}</td></tr>
+                                    <tr><td style={{ padding: '8px', border: '1px solid #ddd' }}>Wilayah (WPP)</td><td style={{ padding: '8px', border: '1px solid #ddd' }}>{lot.catchInfo?.wpp}</td></tr>
+                                    <tr><td style={{ padding: '8px', border: '1px solid #ddd' }}>Suhu Pendaratan</td><td style={{ padding: '8px', border: '1px solid #ddd' }}>{lot.catchInfo?.temp} °C</td></tr>
+                                    <tr><td style={{ padding: '8px', border: '1px solid #ddd' }}>Bobot Awal</td><td style={{ padding: '8px', border: '1px solid #ddd' }}>{lot.processInfo?.original || lot.weight} kg</td></tr>
+                                </table>
+
+                                <h3>Informasi Pemrosesan</h3>
+                                <table style={{ width: '100%', marginBottom: '20px', borderCollapse: 'collapse' }}>
+                                    <tr><td style={{ padding: '8px', border: '1px solid #ddd' }}>Bobot Akhir (Netto)</td><td style={{ padding: '8px', border: '1px solid #ddd', fontWeight: 'bold' }}>{lot.weight} kg</td></tr>
+                                </table>
+
+                                <h3>Hasil Uji Laboratorium (Hilir)</h3>
+                                <table style={{ width: '100%', marginBottom: '30px', borderCollapse: 'collapse' }}>
+                                    <tr><td style={{ padding: '8px', border: '1px solid #ddd' }}>Histamin</td><td style={{ padding: '8px', border: '1px solid #ddd' }}>{lot.labInfo?.histamine} ppm (Standar &lt; 50ppm)</td></tr>
+                                    <tr><td style={{ padding: '8px', border: '1px solid #ddd' }}>Salmonella</td><td style={{ padding: '8px', border: '1px solid #ddd' }}>{lot.labInfo?.salmonella}</td></tr>
+                                    <tr><td style={{ padding: '8px', border: '1px solid #ddd' }}>Logam Berat</td><td style={{ padding: '8px', border: '1px solid #ddd' }}>{lot.labInfo?.metals}</td></tr>
+                                    <tr><td style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#e6ffe6' }}>Keputusan Akhir</td><td style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#e6ffe6', fontWeight: 'bold', color: 'green' }}>{lot.labInfo?.decision} EKSPOR</td></tr>
+                                </table>
+
+                                <div style={{ marginTop: '50px', textAlign: 'right' }}>
+                                    <p>Sistem SITUNA Terintegrasi</p>
+                                    <p>Dicetak pada: {new Date().toLocaleString()}</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             );
         };
 
         /* STREAMING_CHUNK:Main App Entry... */
         const App = () => {
-            const [view, setView] = useState('login'); 
+            const [view, setView] = useState('splash'); 
             const [user, setUser] = useState(null);
             const [toast, setToast] = useState({ show: false, message: '', type: '' });
             const [activeLotId, setActiveLotId] = useState(null);
             
             const [lots, updateLots] = useSharedDatabase();
+
             const showToast = (message, type = 'info') => setToast({ show: true, message, type });
 
-            const handleLogin = (u) => { setUser(u); setView('dashboard'); showToast(`Otorisasi Berhasil: ${u.name}`, 'success'); };
+            const handleLogin = (u) => {
+                setUser(u);
+                setView('dashboard');
+                showToast(`Otorisasi Berhasil: ${u.name}`, 'success');
+            };
 
             return (
                 <div className="min-h-screen relative font-sans text-gray-800 selection:bg-situna-main selection:text-white">
                     <div className="bg-blobs"><div className="blob blob-1"></div><div className="blob blob-2"></div></div>
                     {toast.show && <Toast message={toast.message} type={toast.type} onClose={() => setToast({ show: false, message: '', type: '' })} />}
                     
+                    {view === 'splash' && <SplashScreen onFinish={() => setView('login')} />}
                     {view === 'login' && <LoginScreen onLogin={handleLogin} />}
                     {view === 'dashboard' && !activeLotId && <Dashboard user={user} lots={lots} updateLots={updateLots} onViewDetail={id => setActiveLotId(id)} onLogout={() => { setUser(null); setView('login'); }} showToast={showToast} />}
                     {view === 'dashboard' && activeLotId && <LotDetail lotId={activeLotId} lots={lots} user={user} updateLots={updateLots} onBack={() => setActiveLotId(null)} showToast={showToast} />}
