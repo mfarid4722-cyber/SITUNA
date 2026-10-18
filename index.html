@@ -133,7 +133,7 @@
                 <div className="flex flex-col items-center justify-center min-h-screen text-white fade-in relative z-10">
                     <div className="mb-6 transform transition hover:scale-105 flex justify-center">
                         {/* Menghapus shape, memberi efek bayangan gelap agar logo putih tetap terlihat */}
-                        <img src="logo.png" alt="Logo" className="w-[150px] h-[150px] object-contain drop-shadow-[0_0_15px_rgba(0,0,0,0.4)]" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
+                        <img src="logo.png" alt="Logo" className="w-[220px] h-[220px] object-contain drop-shadow-[0_0_15px_rgba(0,0,0,0.4)]" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
                     </div>
                     
                     <div className="absolute bottom-10 flex flex-col items-center">
@@ -161,15 +161,15 @@
                 <div className="flex items-center justify-center min-h-screen z-10 relative px-4">
                     <div className="glass-card p-10 rounded-3xl w-full max-w-md fade-in relative overflow-hidden">
                         <div className="text-center mb-6">
-                            <div className="flex justify-center mb-6">
-                                {/* Container Shape Modern Dinamis */}
-                                <div className="relative flex items-center justify-center w-[170px] h-[170px]">
-                                    {/* Latar Belakang Biru Dua Warna (Diambil dari referensi gambar) */}
-                                    <div className="absolute inset-0 bg-[#00a0d2] rounded-[2rem] rotate-3 overflow-hidden shadow-lg z-0 transition-transform hover:rotate-0 duration-300">
-                                        <div className="absolute w-[200px] h-[200px] bg-[#36bbe6] rounded-full -top-12 -left-12"></div>
+                            <div className="flex justify-center mb-10 mt-2">
+                                {/* Container Shape diperkecil (120px) tapi Logo tetap besar (150px) agar efek pop-out */}
+                                <div className="relative flex items-center justify-center w-[120px] h-[120px]">
+                                    {/* Latar Belakang Biru Dua Warna */}
+                                    <div className="absolute inset-0 bg-[#00a0d2] rounded-[1.5rem] rotate-3 overflow-hidden shadow-lg z-0 transition-transform hover:rotate-0 duration-300">
+                                        <div className="absolute w-[160px] h-[160px] bg-[#36bbe6] rounded-full -top-10 -left-10"></div>
                                     </div>
-                                    {/* Logo Asli (Tetap 150px) */}
-                                    <img src="logo.png" alt="SITUNA Logo" className="w-[150px] h-[150px] object-contain relative z-10 drop-shadow-md" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
+                                    {/* Logo Asli (Tetap 150px, absolut agar menonjol keluar shape) */}
+                                    <img src="logo.png" alt="SITUNA Logo" className="absolute max-w-none w-[150px] h-[150px] object-contain z-10 drop-shadow-md" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
                                 </div>
                             </div>
                             <h2 className="text-3xl font-display font-bold text-situna-dark">SITUNA Login</h2>
@@ -211,14 +211,14 @@
                 <div className="min-h-screen p-4 md:p-8 max-w-6xl mx-auto fade-in pb-20">
                     <header className="glass-card p-6 rounded-3xl mb-8 flex justify-between items-center shadow-md">
                         <div className="flex items-center gap-4 md:gap-5">
-                            {/* Container Shape Modern Dinamis Header */}
-                            <div className="relative flex items-center justify-center shrink-0 w-[130px] h-[130px] ml-2">
+                            {/* Container Shape diperkecil (85px) tapi Logo tetap besar (120px) agar efek pop-out */}
+                            <div className="relative flex items-center justify-center shrink-0 w-[85px] h-[85px] ml-2 mr-4">
                                 {/* Latar Belakang Biru Dua Warna */}
-                                <div className="absolute inset-0 bg-[#00a0d2] rounded-[1.5rem] -rotate-3 overflow-hidden shadow-md z-0 transition-transform hover:rotate-0 duration-300">
-                                    <div className="absolute w-[160px] h-[160px] bg-[#36bbe6] rounded-full -top-8 -left-10"></div>
+                                <div className="absolute inset-0 bg-[#00a0d2] rounded-[1.2rem] -rotate-3 overflow-hidden shadow-md z-0 transition-transform hover:rotate-0 duration-300">
+                                    <div className="absolute w-[120px] h-[120px] bg-[#36bbe6] rounded-full -top-6 -left-8"></div>
                                 </div>
-                                {/* Logo Asli (Tetap 120px) */}
-                                <img src="logo.png" alt="BKN Logo" className="w-[120px] h-[120px] object-contain relative z-10 drop-shadow-sm" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
+                                {/* Logo Asli (Tetap 120px, absolut agar menonjol keluar shape) */}
+                                <img src="logo.png" alt="BKN Logo" className="absolute max-w-none w-[120px] h-[120px] object-contain z-10 drop-shadow-sm" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
                             </div>
                             <div>
                                 <h1 className="text-xl md:text-2xl font-display font-bold text-situna-dark leading-tight">BADAN KARANTINA NASIONAL</h1>
