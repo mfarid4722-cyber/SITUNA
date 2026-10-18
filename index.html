@@ -131,9 +131,9 @@
 
             return (
                 <div className="flex flex-col items-center justify-center min-h-screen text-white fade-in relative z-10">
-                    <div className="mb-6 transform transition hover:scale-105">
-                        {/* Gambar aslinya 150px tanpa background biru di Splash */}
-                        <img src="logo.png" alt="Logo" className="w-[150px] h-[150px] object-contain drop-shadow-2xl" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
+                    <div className="mb-6 transform transition hover:scale-105 flex justify-center">
+                        {/* Menghapus shape, memberi efek bayangan gelap agar logo putih tetap terlihat */}
+                        <img src="logo.png" alt="Logo" className="w-[150px] h-[150px] object-contain drop-shadow-[0_0_15px_rgba(0,0,0,0.4)]" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
                     </div>
                     
                     <div className="absolute bottom-10 flex flex-col items-center">
@@ -161,9 +161,9 @@
                 <div className="flex items-center justify-center min-h-screen z-10 relative px-4">
                     <div className="glass-card p-10 rounded-3xl w-full max-w-md fade-in relative overflow-hidden">
                         <div className="text-center mb-6">
-                            {/* Kotak birunya membungkus gambar 150px dengan padding (p-3) */}
-                            <div className="inline-flex items-center justify-center mx-auto mb-6 bg-situna-dark rounded-3xl shadow-inner p-3 border-2 border-white/20">
-                                <img src="logo.png" alt="SITUNA Logo" className="w-[150px] h-[150px] object-contain drop-shadow-md" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
+                            {/* Kotak biru dihapus. Logo asli dibesarkan (150px) dengan drop shadow kuat */}
+                            <div className="flex justify-center mb-6">
+                                <img src="logo.png" alt="SITUNA Logo" className="w-[150px] h-[150px] object-contain drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
                             </div>
                             <h2 className="text-3xl font-display font-bold text-situna-dark">SITUNA Login</h2>
                         </div>
@@ -203,10 +203,10 @@
             return (
                 <div className="min-h-screen p-4 md:p-8 max-w-6xl mx-auto fade-in pb-20">
                     <header className="glass-card p-6 rounded-3xl mb-8 flex justify-between items-center shadow-md">
-                        <div className="flex items-center gap-4">
-                            {/* Di Dashboard ukurannya sedikit diperkecil (70px) agar tidak merusak header, dengan kotak biru sebagai bantalan */}
-                            <div className="bg-situna-dark p-2 rounded-2xl shadow-inner border border-white/30 flex items-center justify-center">
-                                <img src="logo.png" alt="BKN Logo" className="w-[70px] h-[70px] object-contain drop-shadow-sm" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
+                        <div className="flex items-center gap-4 md:gap-5">
+                            {/* Shape dihilangkan. Ukuran logo dibesarkan jadi 120px dengan drop shadow */}
+                            <div className="flex items-center justify-center shrink-0">
+                                <img src="logo.png" alt="BKN Logo" className="w-[120px] h-[120px] object-contain drop-shadow-[0_0_12px_rgba(0,0,0,0.4)]" onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
                             </div>
                             <div>
                                 <h1 className="text-xl md:text-2xl font-display font-bold text-situna-dark leading-tight">BADAN KARANTINA NASIONAL</h1>
