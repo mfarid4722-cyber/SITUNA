@@ -73,7 +73,6 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        /* STREAMING_CHUNK:Inisialisasi Sistem dan State... */
         const { useState, useEffect, useRef, useMemo } = React;
 
         const generateID = () => `SITUNA-${Math.floor(100000 + Math.random() * 900000)}`;
@@ -145,7 +144,6 @@
             <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${color}`}>{label}</span>
         );
 
-        /* STREAMING_CHUNK:Layar Pra-muat & Otentikasi... */
         const SplashScreen = ({ onFinish }) => {
             useEffect(() => {
                 const timer = setTimeout(onFinish, 2500);
@@ -216,7 +214,6 @@
             );
         };
 
-        /* STREAMING_CHUNK:Portal Akses Publik... */
         const ConsumerPortal = ({ lots, onLogout, showToast }) => {
             const [searchId, setSearchId] = useState('');
             const [scannedLot, setScannedLot] = useState(null);
@@ -436,7 +433,6 @@
             );
         };
 
-        /* STREAMING_CHUNK:Panel Manajemen Utama (Dashboard)... */
         const Dashboard = ({ user, lots, updateLots, onLogout, showToast, onViewDetail }) => {
             const [showCreateModal, setShowCreateModal] = useState(false);
             const [deleteConfirm, setDeleteConfirm] = useState(null);
@@ -619,7 +615,6 @@
             );
         };
 
-        /* STREAMING_CHUNK:Evaluasi Rantai Pasok Terpadu... */
         const LotDetail = ({ lotId, lots, user, onBack, updateLots, showToast }) => {
             const lot = lots.find(l => l.id === lotId);
             const [tab, setTab] = useState('Inspeksi & Uji Klinis');
@@ -685,7 +680,7 @@
                 const element = document.getElementById('pdf-certificate-content');
                 
                 const opt = { 
-                    margin: [30, 30, 30, 30], /* Margin 3-3-3-3 dalam satuan millimeter (mm) */
+                    margin: [30, 30, 30, 30], 
                     filename: `HealthCertificate_${lot.id}.pdf`, 
                     image: { type: 'jpeg', quality: 0.98 }, 
                     html2canvas: { scale: 2, useCORS: true }, 
@@ -904,14 +899,17 @@
                         </div>
                     </div>
 
-                    {/* STREAMING_CHUNK:Dokumen Cetak PDF Format A4 Margin 3-3-3-3... */}
+                    {/* Dokumen Cetak PDF Format A4 Margin 3-3-3-3 */}
                     <div id="pdf-certificate-container" style={{display: 'none', width: '100%', backgroundColor: '#fff'}}>
                         <div id="pdf-certificate-content" style={{ padding: '0', width: '100%', fontFamily: '"Times New Roman", Times, serif', color: '#000000', backgroundColor: '#ffffff', textAlign: 'left' }}>
                             <div style={{ display: 'flex', alignItems: 'center', borderBottom: '3px double #000000', paddingBottom: '15px', marginBottom: '20px' }}>
                                 <div style={{ width: '25mm', marginRight: '5mm', textAlign: 'center' }}>
-                                    <svg viewBox="0 0 100 100" width="80" height="80" style={{ display: 'block', margin: '0 auto' }}>
-                                        <path d="M50 5C25.1 5 5 25.1 5 50s20.1 45 45 45 45-20.1 45-45S74.9 5 50 5zm0 82c-20.4 0-37-16.6-37-37s16.6-37 37-37 37 16.6 37 37-16.6 37-37 37zm-4-57v22h-12l16 20 16-20h-12v-22z" fill="#000000"/>
-                                    </svg>
+                                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '70px', height: '70px', margin: '0 auto' }}>
+                                        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#00a0d2', borderRadius: '1rem', transform: 'rotate(3deg)', overflow: 'hidden', zIndex: 0 }}>
+                                            <div style={{ position: 'absolute', width: '90px', height: '90px', backgroundColor: '#36bbe6', borderRadius: '50%', top: '-15px', left: '-15px' }}></div>
+                                        </div>
+                                        <img src="logo.png" alt="SITUNA Logo" style={{ position: 'absolute', width: '85px', height: '85px', objectFit: 'contain', zIndex: 10 }} onError={(e) => { e.target.onerror = null; e.src = './logo.png'; }} />
+                                    </div>
                                 </div>
                                 <div style={{ flex: 1, textAlign: 'left' }}>
                                     <h2 style={{ fontSize: '14pt', fontWeight: 'bold', margin: 0, textTransform: 'uppercase', fontFamily: '"Times New Roman", Times, serif', color: '#000' }}>BADAN KARANTINA INDONESIA</h2>
